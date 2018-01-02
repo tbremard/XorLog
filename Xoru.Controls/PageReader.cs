@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
+using System.Drawing;
 
 namespace Xoru.Controls
 {
@@ -8,6 +9,18 @@ namespace Xoru.Controls
         public PageReader()
         {
             InitializeComponent();
+//            lstPageContent.DrawMode = DrawMode.OwnerDrawFixed;
+//            lstPageContent.DrawItem += listBox_DrawItem;
+        }
+
+        private void listBox_DrawItem(object sender, DrawItemEventArgs e)
+        {
+            e.DrawBackground();
+            Graphics g = e.Graphics;
+            g.FillRectangle(new SolidBrush(Color.White), e.Bounds);
+            ListBox lb = (ListBox)sender;
+            g.DrawString(lb.Items[e.Index].ToString(), e.Font, new SolidBrush(Color.Red), new PointF(e.Bounds.X, e.Bounds.Y));
+            e.DrawFocusRectangle();
         }
 
         public void SetScrollMaster(long sizeOfFileInBytes)
