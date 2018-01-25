@@ -8,19 +8,21 @@ using NUnit.Framework;
 
 namespace XorLog.Core.Tests
 {
-    class PresenterTest
+    class PresenterTest : TestUtil
     {
+        private ResultOfSearch _resultOfSearch;
         const string TEST_FILE = @"D:\prog\design_patterns\XorLog\src\src\Files4Test\BigFile.txt";
         const string SAMPLE_FILE = @"D:\prog\design_patterns\XorLog\src\src\Files4Test\Sample.txt";
         
         private Page _currentPage;
-
         private Presenter _sut;
         private ILogView _view;
+
         [SetUp]
         public void Setup()
         {
-            Console.WriteLine("current directory: "+Environment.CurrentDirectory);
+            ConfigureLogger();
+            Log.Debug("current directory: "+Environment.CurrentDirectory);
             _view = Substitute.For<ILogView>();
             _sut = new Presenter();
             _sut.PageLoaded += _sut_PageLoaded;
@@ -35,6 +37,7 @@ namespace XorLog.Core.Tests
         void _sut_PageLoaded(object sender, PageLoadedEventArgs e)
         {
             _currentPage = e.Content;
+            Log.Debug("Page is loaded");
         }
 
         [Test]
@@ -138,7 +141,7 @@ namespace XorLog.Core.Tests
             DumpList(_resultOfSearch.Content);
         }
 
-        [Ignore("Requirement canceled")]
+//        [Ignore("Requirement canceled")]
         [Test]
         public void PageLoaded_WhenFileIsDeleted_ThenPageIsBlank()
         {
@@ -157,6 +160,7 @@ namespace XorLog.Core.Tests
             WaitForPage();
             _currentPage = null;
             File.Delete(TEMP_TEST_FILE);
+            Log.Debug("File is deleted");
             WaitForPage();
 
             const int EXPECTED_RESULT = 0;
@@ -232,11 +236,15 @@ namespace XorLog.Core.Tests
                 Thread.Yield();
                 counter++;
             }
-            Console.WriteLine("page loaded");
+            if (_currentPage != null)
+            {
+                Log.Debug("Page loaded succesfully. TotalSize= " + _currentPage.TotalSize);
+            }
+            else
+            {
+                Log.Debug("Page loading failed ( timeout)");
+            }
         }
 
-        private ResultOfSearch _resultOfSearch;
     }
-
-
 }

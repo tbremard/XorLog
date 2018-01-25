@@ -1,3 +1,4 @@
 /CreateBigFile.Cmd/obj/*
 /*/obj/*
 /packages/*
+/Files4Test/BigFile.txt

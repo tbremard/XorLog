@@ -15,7 +15,7 @@ namespace XorLog.WinMain
 {
     public partial class WinMain : Form, ILogView
     {
-        private static readonly ILog Log = LogManager.GetLogger("WinMain");
+        private ILog Log;
         Presenter _presenter;
         private Page _currentPage;
         private SearchRequest _lastRequest;
@@ -28,30 +28,40 @@ namespace XorLog.WinMain
 
         private void WinMain_Shown(object sender, EventArgs e)
         {
-
-            // Add a link to the LinkLabel.
-            LinkLabel.Link link = new LinkLabel.Link();
-            link.LinkData = "https://xoru.eu";
-            linkXoru.Links.Add(link);
-            _reader.scrollMaster.Scroll += scrollMaster_Scroll;
+            AddLink();
             _presenter = new Presenter();
-            var parameters = new CommandLineParameter(Environment.GetCommandLineArgs());
+            string[] commandLineArgs = Environment.GetCommandLineArgs();
+            var parameters = new CommandLineParameter(commandLineArgs);
             WindowState = parameters.WindowState;
             chkAutoScroll.Checked = parameters.AutoScroll;
+            SetEventHandlers();
+
+            if (parameters.File != null && File.Exists(parameters.File))
+            {
+                OpenFileAndShowPage(parameters.File);
+            }
+            else
+            {
+                ClearScreen();
+            }
+        }
+
+        private void SetEventHandlers()
+        {
+            _reader.scrollMaster.Scroll += scrollMaster_Scroll;
             _reader.lstPageContent.ScrollLimitReached += LstFileContentScrollLimitReached;
             _reader.lstPageContent.ScrollValueChanged += LstFileContentOnScrollValueChanged;
             _presenter.FileLoaded += _presenter_FileLoaded;
             _presenter.PageLoaded += PresenterOnPageLoaded;
             _presenter.TailUpdated += _presenter_TailUpdated;
             _presenter.SearchIsFinished += _presenter_SearchIsFinished;
-            if (parameters.File == null)
-            {
-                ClearScreen();
-            }
-            else
-            {
-                OpenFileAndShowPage(parameters.File);
-            }
+        }
+
+        private void AddLink()
+        {
+            LinkLabel.Link link = new LinkLabel.Link();
+            link.LinkData = "https://xoru.eu";
+            linkXoru.Links.Add(link);
         }
 
         void _presenter_SearchIsFinished(object sender, SearchEventArgs e)
@@ -345,12 +355,12 @@ namespace XorLog.WinMain
 
         private void ConfigureLogger()
         {
-            // On récupère le chemin du fichier de config
             var configFile = Directory.GetCurrentDirectory() + @"\log4net.config";
 
             // On remplace le BasicConfigurator par le XmlConfigurator
             // et on charge la configuration définie dans le fichier log4net.config
             XmlConfigurator.Configure(new FileInfo(configFile));
+            Log = LogManager.GetLogger("WinMain");
         }
 
         private void WinMain_DragOver(object sender, DragEventArgs e)

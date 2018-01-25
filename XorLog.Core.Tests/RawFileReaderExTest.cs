@@ -4,15 +4,16 @@ using NUnit.Framework;
 
 namespace XorLog.Core.Tests
 {
-    class RawFileReaderExTest
+    class RawFileReaderExTest : TestUtil
     {
+
         private RawFileReaderEx _sut;
 
         [SetUp]
         public void Setup()
         {
             _sut = new RawFileReaderEx();
-            Console.WriteLine("current dire: "+Environment.CurrentDirectory);
+            Console.WriteLine("current dir: "+Environment.CurrentDirectory);
         }
 
         [Test]
