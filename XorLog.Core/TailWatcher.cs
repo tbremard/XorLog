@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Threading;
+using log4net;
 
 namespace XorLog.Core
 {
@@ -15,6 +16,7 @@ namespace XorLog.Core
         public event EventHandler<TailEventArgs> TailChanged;
         public TailWatcher(string directoryName, string fileName)
         {
+            Log = LogManager.GetLogger("TailWatcher");
             _directoryName = directoryName;
             _fileName = fileName;
             PollIntervalInMs = _pollIntervalInMs;
@@ -37,6 +39,7 @@ namespace XorLog.Core
 
         private void MonitorThreadProc()
         {
+            Thread.CurrentThread.Name = "TailThread";
             var fileInfo = new FileInfo(Path.Combine(_directoryName, _fileName));
             long lastLength = fileInfo.Length;
             while (!_shouldStop)
@@ -46,13 +49,19 @@ namespace XorLog.Core
                 long currentLength = fileInfo.Length;
                 if (currentLength != lastLength)
                 {
-                    OnMoreContentAdded(lastLength, currentLength);
+                    Log.Debug("!!");
+                    OnTailChanged(lastLength, currentLength);
                     lastLength = currentLength;
+                }
+                else
+                {
+                    Log.Debug("^");
                 }
             }
         }
+        protected ILog Log;
 
-        private void OnMoreContentAdded(long lastLength, long currentLength)
+        private void OnTailChanged(long lastLength, long currentLength)
         {
             if (TailChanged != null)
             {
