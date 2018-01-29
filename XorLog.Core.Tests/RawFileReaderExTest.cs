@@ -12,8 +12,9 @@ namespace XorLog.Core.Tests
         [SetUp]
         public void Setup()
         {
+            ConfigureLogger();
             _sut = new RawFileReaderEx();
-            Console.WriteLine("current dir: "+Environment.CurrentDirectory);
+            Log.Debug("current dir: "+Environment.CurrentDirectory);
         }
 
         [Test]
@@ -42,7 +43,22 @@ namespace XorLog.Core.Tests
             _sut.Close();
             Assert.AreEqual(EXPECTED_RESULT, result);
         }
+        
+        [Test]
+        public void ReadBlock_WhenReadFirstLineOfFile_ThenLineContentIsValid()
+        {
+            const string EXPECTED_RESULT = "this is first line";//first line in file
+            _sut.Open("5lines.txt");
+            const int BUFFER_SIZE = 20;
+            char[] buffer = new char[BUFFER_SIZE];
 
+            var result = _sut.ReadBlock(buffer, BUFFER_SIZE);
+
+            _sut.Close();
+            Assert.AreEqual(20, result.SizeInBytes);
+            Assert.AreEqual(1, result.Content.Count);
+            Assert.AreEqual(EXPECTED_RESULT, result.Content[0]);
+        }
 
         [Test]
         public void Open_WhenFileIsDeletedWhileOpen_ThenDoNotExistAnyMore()
@@ -56,7 +72,6 @@ namespace XorLog.Core.Tests
 
             _sut.Open(TEMP_TEST_FILE);
             File.Delete(TEMP_TEST_FILE); // delete the file when open
-            _sut.Close();
 
             Assert.IsFalse(File.Exists(TEMP_TEST_FILE), "File should be deleted");
         }

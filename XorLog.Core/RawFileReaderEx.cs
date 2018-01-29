@@ -14,26 +14,42 @@ namespace XorLog.Core
         private static readonly ILog Log = LogManager.GetLogger("RawFileReaderEx");
         private FileStream _stream;
         private FileInfo _fileInfo;
+        private string _path;
+        private long _currentPosition;
+        private SeekOrigin _currentSeekOrigin;
+
+
         public void Open(string path)
         {
-            if (string.IsNullOrEmpty(path))
-            {
-                throw new ArgumentNullException("Path");
-            }
-            if (!File.Exists(path))
-            {
-                throw new FileNotFoundException(path);
-            }
+            _path = path;
+            CheckPath();
+            _currentPosition = 0;
+        }
 
+        private void OpenFile()
+        {
+            CheckPath();
             int bufferSize = 1000;
             try
             {
-                _stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite|FileShare.Delete, bufferSize);
-                _fileInfo = new FileInfo(path);
+                _stream = new FileStream(_path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite|FileShare.Delete, bufferSize);
+                _fileInfo = new FileInfo(_path);
             }
             catch (IOException e)
             {
                 Log.Debug(e);
+            }
+        }
+
+        private void CheckPath()
+        {
+            if (string.IsNullOrEmpty(_path))
+            {
+                throw new ArgumentNullException("Path");
+            }
+            if (!File.Exists(_path))
+            {
+                throw new FileNotFoundException(_path);
             }
         }
 
@@ -42,7 +58,7 @@ namespace XorLog.Core
             _stream.SetLength(value);
         }
 
-        public void Close()
+        private void CloseFile()
         {
             if (_stream!=null)
             {
@@ -52,19 +68,31 @@ namespace XorLog.Core
             }
         }
 
+        public void Close()
+        {
+            _path = null;
+        }
+
+        private void ReloadCurrentPosition()
+        {
+            _stream.Seek(_currentPosition, _currentSeekOrigin);
+        }
+
         public void SetPosition(long offset, SeekOrigin origin)
         {
-            _stream.Seek(offset, origin);
+            _currentPosition = offset;
+            _currentSeekOrigin = origin;
         }
 
         public long GetPosition()
         {
-            long ret = _stream.Position;
-            return ret;
+            return _currentPosition;
         }
 
         public ReadBlock ReadBlock(char[] buffer, long count)
         {
+            OpenFile();
+            ReloadCurrentPosition();
             byte[] array = new byte[count];
             int nbRead = _stream.Read(array, 0, (int)count);
             string decoded = Encoding.UTF8.GetString(array, 0, nbRead);
@@ -73,6 +101,9 @@ namespace XorLog.Core
             var ret = new ReadBlock();
             ret.Content = lines.Select(x => x.TrimEnd()).ToList();;
             ret.SizeInBytes = nbRead;
+            _currentPosition = _stream.Position;
+            _currentSeekOrigin = SeekOrigin.Begin;
+            CloseFile();
             return ret;
         }
 
@@ -102,14 +133,15 @@ namespace XorLog.Core
             long bytesToRead = _fileInfo.Length - offsetStart;
             char[] buffer = new char[bytesToRead];
             ReadBlock block= ReadBlock(buffer, bytesToRead);
-            IList<string> ret = block.Content;//CreateLinesFromBuffer(buffer, length);
+            IList<string> ret = block.Content;
             return ret; 
         }
 
         public string ReadLine()
         {
             StringBuilder sb = new StringBuilder(100);
-
+            OpenFile();
+            ReloadCurrentPosition();
             while (true)
             {
                 char c = (char) _stream.ReadByte();
@@ -120,6 +152,9 @@ namespace XorLog.Core
                 sb.Append(c);
             }
             string ret = sb.ToString();
+            _currentPosition = _stream.Position;
+            _currentSeekOrigin = SeekOrigin.Begin;
+            CloseFile();
             return ret;
         }
     }
@@ -128,7 +163,6 @@ namespace XorLog.Core
     {
         public int SizeInBytes;
         public IList<string> Content;
-
     }
 
 }

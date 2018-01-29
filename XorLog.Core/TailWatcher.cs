@@ -40,13 +40,22 @@ namespace XorLog.Core
         private void MonitorThreadProc()
         {
             Thread.CurrentThread.Name = "TailThread";
+            Log.Debug("MonitorThreadProc is started");
             var fileInfo = new FileInfo(Path.Combine(_directoryName, _fileName));
             long lastLength = fileInfo.Length;
             while (!_shouldStop)
             {
                 Thread.Sleep(PollIntervalInMs);
-                fileInfo.Refresh();
-                long currentLength = fileInfo.Length;
+                long currentLength = 0; 
+                try
+                {
+                    fileInfo.Refresh();
+                    currentLength = fileInfo.Length;
+                }
+                catch (FileNotFoundException e)
+                {
+                    Log.Debug("File was deleted");
+                }
                 if (currentLength != lastLength)
                 {
                     Log.Debug("!!");
@@ -58,6 +67,7 @@ namespace XorLog.Core
                     Log.Debug("^");
                 }
             }
+            Log.Debug("MonitorThreadProc is finished");
         }
         protected ILog Log;
 
@@ -66,7 +76,9 @@ namespace XorLog.Core
             if (TailChanged != null)
             {
                 var args = new TailEventArgs(lastLength, currentLength);
+                Log.Debug("Raising event TailChanged...");
                 TailChanged(this, args);
+                Log.Debug(".. Event TailChanged is raised");                
             }
         }
     }

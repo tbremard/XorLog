@@ -80,6 +80,12 @@ namespace XorLog.Core
         {
             _fileInfo.Refresh();
             NewContentIsAvailable = true;
+            if (e.CurrentLength == 0)
+            {
+                EmptyPage();
+                OnPageLoaded();
+                return;
+            }
             if (e.CurrentLength>e.LastLength)
             {
                 IList<string> tail = _stream.GetEndOfFile(e.LastLength);
@@ -90,6 +96,12 @@ namespace XorLog.Core
                 FillCurrentPage(_currentPage.OffsetStart);
                 OnPageLoaded();
             }
+        }
+
+        private void EmptyPage()
+        {
+            var noline = new List<string>();
+            _currentPage = new Page(0, 0, 0, noline, 0);
         }
 
         private void OnTailUpdated(IList<string> tail)

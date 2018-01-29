@@ -160,6 +160,7 @@ namespace XorLog.Core.Tests
             WaitForPage();
             _currentPage = null;
             File.Delete(TEMP_TEST_FILE);
+            Assert.IsFalse(File.Exists(TEMP_TEST_FILE),"File was intended to be deleted, but still present !");
             Log.Debug("File is deleted");
             WaitForPage();
 
@@ -232,7 +233,8 @@ namespace XorLog.Core.Tests
             int counter = 0;
             while (_currentPage == null && counter <10)
             {
-                Thread.Sleep(200);
+                const int SLEEP_TIME_IN_MS = 500;
+                Thread.Sleep(SLEEP_TIME_IN_MS);
                 Thread.Yield();
                 counter++;
             }
