@@ -123,16 +123,19 @@ namespace XorLog.Core
 
         public IList<string> GetEndOfFile(long offsetStart)
         {
+            OpenFile();
             _fileInfo.Refresh();
             if (offsetStart>_fileInfo.Length)
             {
                 Log.Error("file reduced size");
                 return new List<string>();
             }
+            _currentPosition = offsetStart;
             _stream.Seek(offsetStart, SeekOrigin.Begin);
             long bytesToRead = _fileInfo.Length - offsetStart;
             char[] buffer = new char[bytesToRead];
             ReadBlock block= ReadBlock(buffer, bytesToRead);
+            CloseFile();
             IList<string> ret = block.Content;
             return ret; 
         }

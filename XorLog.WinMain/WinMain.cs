@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Windows.Forms;
 using log4net;
 using log4net.Config;
@@ -22,6 +23,7 @@ namespace XorLog.WinMain
 
         public WinMain()
         {
+            Thread.CurrentThread.Name = "MainThread";
             ConfigureLogger();
             InitializeComponent();
         }

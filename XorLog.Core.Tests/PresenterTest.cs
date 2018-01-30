@@ -121,7 +121,7 @@ namespace XorLog.Core.Tests
             appender.AppendLine(NEW_LINE);
             appender.CloseFile();
 
-            Thread.Sleep(1000);
+            WaitForTail();
             Assert.IsNotNull(_newTail, "New tail should have been set");
             Assert.IsTrue(_newTail.Contains(NEW_LINE), "New line should be contained in tail");
             Assert.AreEqual(1, _newTail.Count, "Invalid number of lines in tail");
@@ -141,7 +141,6 @@ namespace XorLog.Core.Tests
             DumpList(_resultOfSearch.Content);
         }
 
-//        [Ignore("Requirement canceled")]
         [Test]
         public void PageLoaded_WhenFileIsDeleted_ThenPageIsBlank()
         {
@@ -205,6 +204,7 @@ namespace XorLog.Core.Tests
         private IList<string> _newTail;
         private void SutOnTailUpdated(object sender, TailUpdatedEventArgs args)
         {
+            Log.Debug("tail is received");
             _newTail = args.Tail;
         }
 
@@ -244,7 +244,26 @@ namespace XorLog.Core.Tests
             }
             else
             {
-                Log.Debug("Page loading failed ( timeout)");
+                Log.Debug("Page loading failed (timeout)");
+            }
+        }
+        private void WaitForTail()
+        {
+            int counter = 0;
+            while (_newTail == null && counter < 10)
+            {
+                const int SLEEP_TIME_IN_MS = 500;
+                Thread.Sleep(SLEEP_TIME_IN_MS);
+                Thread.Yield();
+                counter++;
+            }
+            if (_newTail != null)
+            {
+                Log.Debug("_newTail loaded succesfully. TotalLines= " + _newTail.Count);
+            }
+            else
+            {
+                Log.Debug("_newTail loading failed (timeout)");
             }
         }
 
