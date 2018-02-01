@@ -52,7 +52,7 @@ namespace XorLog.Core.Tests
             const int BUFFER_SIZE = 20;
             char[] buffer = new char[BUFFER_SIZE];
 
-            var result = _sut.ReadBlock(buffer, BUFFER_SIZE);
+            var result = _sut.ReadBlock(buffer, BUFFER_SIZE, null);
 
             _sut.Close();
             Assert.AreEqual(20, result.SizeInBytes);

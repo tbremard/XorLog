@@ -56,7 +56,7 @@ namespace XorLog.Core
             return ret;
         }
 
-        public ReadBlock ReadBlock(char[] buffer, long count)
+        public ReadBlock ReadBlock(char[] buffer, long count, IList<string> _rejectionList)
         {
             throw new NotImplementedException();
             var ret = new ReadBlock();
@@ -68,7 +68,7 @@ namespace XorLog.Core
             return _stream.Peek();
         }
 
-        public IList<string> GetEndOfFile(long offsetStart)
+        public IList<string> GetEndOfFile(long offsetStart, IList<string> _rejectionList)
         {
             _stream.BaseStream.Seek(offsetStart, SeekOrigin.Begin);
             _stream.DiscardBufferedData();

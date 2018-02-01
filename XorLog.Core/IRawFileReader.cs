@@ -9,9 +9,9 @@ namespace XorLog.Core
         void Close();
         void SetPosition(long offset, SeekOrigin origin);
         long GetPosition();
-        ReadBlock ReadBlock(char[] buffer, long count);
+        ReadBlock ReadBlock(char[] buffer, long count, IList<string> _rejectionList);
         int Peek();
-        IList<string> GetEndOfFile(long offsetStart);
+        IList<string> GetEndOfFile(long offsetStart, IList<string> _rejectionList);
         string ReadLine();
         IList<string> CreateLinesFromBuffer(char[] buffer, long length);
     }

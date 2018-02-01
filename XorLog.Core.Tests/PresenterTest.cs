@@ -94,17 +94,21 @@ namespace XorLog.Core.Tests
         }
 
         [Test]
-        public void NewContentIsAvailable_WhenFileIsChanged_ThenTrue()
+        public void NewContentIsAvailable_WhenLineIsAdded_ThenTrue()
         {
             _sut.OpenFile(TEST_FILE);
             const string NEW_LINE = "TEST LINE ADDED";
 
+            Thread.Sleep(1000);
             var appender = new FileAppender();
             appender.OpenFile(TEST_FILE);
             appender.AppendLine(NEW_LINE);
             appender.CloseFile();
+            Log.Debug("Line is added");
             
+            Thread.Yield();
             Thread.Sleep(1000);
+
             Assert.IsTrue(_sut.NewContentIsAvailable);
         }
 
@@ -167,6 +171,36 @@ namespace XorLog.Core.Tests
             Assert.IsNotNull(_currentPage, "Page was not set !");
             Assert.AreEqual(EXPECTED_RESULT, _currentPage.Lines.Count);
         }
+
+        [Test]
+        public void PageLoaded_WhenRejectionIsSet_ThenPageHasNoRejectedWord()
+        {
+            const string TEMP_TEST_FILE = "temp1.txt";
+            File.Delete(TEMP_TEST_FILE);
+            var appender = new FileAppender();
+            const string REJECTION_WORD = "REJECT";
+            const string NEW_LINE_1 = "aaaaaaaaaaaaaa";
+            const string NEW_LINE_2 = "bbb" + REJECTION_WORD+"cccc";
+            const string NEW_LINE_3 = "cccccccccccccc" + REJECTION_WORD;
+            const string NEW_LINE_4 = "zzzzzzzzzzzzzzzzzz";
+            appender.OpenFile(TEMP_TEST_FILE);
+            appender.AppendLine(NEW_LINE_1);
+            appender.AppendLine(NEW_LINE_2);
+            appender.AppendLine(NEW_LINE_3);
+            appender.AppendLine(NEW_LINE_4);
+            appender.CloseFile();
+
+            var rejectionList = new List<string>{REJECTION_WORD};
+            _sut.SetRejection(rejectionList);
+            _sut.OpenFile(TEMP_TEST_FILE);
+            _sut.GetFirstPage();
+            WaitForPage();
+
+            const int EXPECTED_RESULT = 2;
+            Assert.IsNotNull(_currentPage, "Page was not set !");
+            Assert.AreEqual(EXPECTED_RESULT, _currentPage.Lines.Count);
+        }
+
 
         [Test]
         public void PageLoaded_WhenFileIsTruncated_ThendPageIsCorrectlyUpdated()

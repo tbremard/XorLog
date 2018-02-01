@@ -52,7 +52,7 @@ namespace XorLog.Core
                     fileInfo.Refresh();
                     currentLength = fileInfo.Length;
                 }
-                catch (FileNotFoundException e)
+                catch (FileNotFoundException)
                 {
                     Log.Debug("File was deleted");
                 }
@@ -64,7 +64,7 @@ namespace XorLog.Core
                 }
                 else
                 {
-                    Log.Debug("^");
+                    Log.Debug("...");
                 }
             }
             Log.Debug("MonitorThreadProc is finished");
