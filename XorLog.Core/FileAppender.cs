@@ -1,25 +1,28 @@
 ﻿using System;
 using System.IO;
+using System.Text;
 using System.Threading;
 
 namespace XorLog.Core
 {
     public class FileAppender
     {
-        private StreamWriter _stream;
+        private FileInfo _info;
+        private FileStream _stream;
         public long FileSize 
         { 
             get
             {
-                info.Refresh();
-                return info.Length;
+                _info.Refresh();
+                return _info.Length;
             }  
         }
-        private FileInfo info;
         public void OpenFile(string fileName)
         {
-            _stream = new StreamWriter(fileName, true);
-            info = new FileInfo(fileName);
+            _stream = new FileStream(fileName, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite | FileShare.Delete);
+            _stream.Seek(0, SeekOrigin.End);
+//            _stream = new StreamWriter(fileName, true);
+            _info = new FileInfo(fileName);
         }
 
         public void DeleteFile(string fileName)
@@ -47,13 +50,15 @@ namespace XorLog.Core
 
         public void AppendLine(string s)
         {
-            _stream.WriteLine(s);
+//            byte[] bytes = s.ToCharArray();
+            byte[] toBytes = Encoding.UTF8.GetBytes(s+"\r\n");
+            _stream.Write(toBytes, 0, toBytes.Length);
             _stream.Flush();
         }
 
         public void SetLength(long value)
         {
-            _stream.BaseStream.SetLength(value);
+            _stream.SetLength(value);
         }
     }
 }

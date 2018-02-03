@@ -7,19 +7,21 @@ namespace XorLog.Core
 {
     internal class TailWatcher
     {
-        private Thread _monitorThread;
+        private readonly ILog _log;
         private readonly string _directoryName;
         private readonly string _fileName;
-        private int _pollIntervalInMs = 500;
+        private const int DEFAULT_POLL_INTERVAL_IN_MS = 500;
+        private bool _isReady = false;
+        private Thread _monitorThread;
         public int PollIntervalInMs { get; set; }
         private bool _shouldStop;
         public event EventHandler<TailEventArgs> TailChanged;
         public TailWatcher(string directoryName, string fileName)
         {
-            Log = LogManager.GetLogger("TailWatcher");
+            _log = LogManager.GetLogger("TailWatcher");
             _directoryName = directoryName;
             _fileName = fileName;
-            PollIntervalInMs = _pollIntervalInMs;
+            PollIntervalInMs = DEFAULT_POLL_INTERVAL_IN_MS;
         }
 
         public void Start()
@@ -28,6 +30,15 @@ namespace XorLog.Core
             _monitorThread.IsBackground = true;
             _shouldStop = false;
             _monitorThread.Start();
+            WaitToBeReady();
+        }
+
+        private void WaitToBeReady()
+        {
+            while (!_isReady)
+            {
+                Thread.Sleep(10);
+            }
         }
 
         public void Stop()
@@ -40,12 +51,12 @@ namespace XorLog.Core
         private void MonitorThreadProc()
         {
             Thread.CurrentThread.Name = "TailThread";
-            Log.Debug("MonitorThreadProc is started");
+            _log.Debug("MonitorThreadProc is started");
             var fileInfo = new FileInfo(Path.Combine(_directoryName, _fileName));
             long lastLength = fileInfo.Length;
+            _isReady = true;
             while (!_shouldStop)
             {
-                Thread.Sleep(PollIntervalInMs);
                 long currentLength = 0; 
                 try
                 {
@@ -54,31 +65,31 @@ namespace XorLog.Core
                 }
                 catch (FileNotFoundException)
                 {
-                    Log.Debug("File was deleted");
+                    _log.Debug("File was deleted");
                 }
                 if (currentLength != lastLength)
                 {
-                    Log.Debug("!!");
+                    _log.Debug("!!");
                     OnTailChanged(lastLength, currentLength);
                     lastLength = currentLength;
                 }
                 else
                 {
-                    Log.Debug("...");
+                    _log.Debug("...");
                 }
+                Thread.Sleep(PollIntervalInMs);
             }
-            Log.Debug("MonitorThreadProc is finished");
+            _log.Debug("MonitorThreadProc is finished");
         }
-        protected ILog Log;
 
         private void OnTailChanged(long lastLength, long currentLength)
         {
             if (TailChanged != null)
             {
                 var args = new TailEventArgs(lastLength, currentLength);
-                Log.Debug("Raising event TailChanged...");
+                _log.Debug("Raising event TailChanged...");
                 TailChanged(this, args);
-                Log.Debug(".. Event TailChanged is raised");                
+                _log.Debug(".. Event TailChanged is raised");                
             }
         }
     }
