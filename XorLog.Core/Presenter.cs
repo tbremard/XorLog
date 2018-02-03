@@ -14,7 +14,7 @@ namespace XorLog.Core
         public event EventHandler<PageLoadedEventArgs> PageLoaded;
         public event EventHandler<TailUpdatedEventArgs> TailUpdated;
         public event EventHandler<SearchEventArgs> SearchIsFinished;
-        private IList<string> _rejectionList;
+        public IList<string> RejectionList { get; set; }
 
         public long PageSizeInBytes { get { return MAX_PAGE_SIZE_IN_BYTES; } }
         private const double MINIMUM_DELAY_IN_MS = 200;
@@ -35,6 +35,7 @@ namespace XorLog.Core
             Log.DebugFormat("Using PageSize: {0} Bytes", PageSizeInBytes);
             Thread t = new Thread(RequestPoller);
             t.Start();
+            RejectionList = new List<string>();
         }
 
         public void OpenFile(string path)
@@ -89,7 +90,7 @@ namespace XorLog.Core
             }
             if (e.CurrentSizeOfFile>e.LastSizeOfFile)
             {
-                IList<string> tail = _stream.GetEndOfFile(e.LastSizeOfFile, _rejectionList);
+                IList<string> tail = _stream.GetEndOfFile(e.LastSizeOfFile, RejectionList);
                 OnTailUpdated(tail);                
             }
             else if (e.CurrentSizeOfFile < e.LastSizeOfFile)
@@ -130,7 +131,7 @@ namespace XorLog.Core
         {
             long offsetStart = _stream.GetPosition();
             char[] buffer = new char[MAX_PAGE_SIZE_IN_BYTES];
-            ReadBlock block = _stream.ReadBlock(buffer, MAX_PAGE_SIZE_IN_BYTES, _rejectionList);
+            ReadBlock block = _stream.ReadBlock(buffer, MAX_PAGE_SIZE_IN_BYTES, RejectionList);
             long currentPageSize = block.SizeInBytes;
             long offsetStop = offsetStart+currentPageSize;
             _currentPage = new Page(offsetStart, offsetStop, currentPageSize, block.Content, requestedOffset);
@@ -335,11 +336,6 @@ namespace XorLog.Core
         {
             bool ret = lineOfText.Contains(searchPattern);
             return ret;
-        }
-
-        public void SetRejection(List<string> rejectionList)
-        {
-            _rejectionList = rejectionList;
         }
     }
 }

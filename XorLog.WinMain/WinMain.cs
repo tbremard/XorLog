@@ -436,5 +436,13 @@ namespace XorLog.WinMain
             lblSizeInBytes.Text = string.Empty;
             lblSizeReadable.Text = string.Empty;
         }
+
+        private void btnReject_Click(object sender, EventArgs e)
+        {
+            var rejection = new Rejection();
+            rejection.SetInitialList(_presenter.RejectionList);
+            DialogResult x = rejection.ShowDialog();
+            _presenter.RejectionList = rejection.RejectionList;
+        }
     }
 }

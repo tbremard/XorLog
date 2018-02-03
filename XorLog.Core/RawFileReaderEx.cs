@@ -105,6 +105,10 @@ namespace XorLog.Core
             {
                 ret.Content = linesNotFiltered;
             }
+            else if (!_rejectionList.Any())
+            {
+                ret.Content = linesNotFiltered;                
+            }
             else
             {
                 ret.Content = new List<string>();

@@ -49,6 +49,7 @@ namespace XorLog.WinMain
             this.txtFilePath = new System.Windows.Forms.TextBox();
             this.linkXoru = new System.Windows.Forms.LinkLabel();
             this.tmrSearchRequest = new System.Windows.Forms.Timer(this.components);
+            this.btnReject = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.split)).BeginInit();
             this.split.Panel1.SuspendLayout();
             this.split.Panel2.SuspendLayout();
@@ -66,14 +67,14 @@ namespace XorLog.WinMain
             this.lstSearchResult.ItemHeight = 14;
             this.lstSearchResult.Location = new System.Drawing.Point(3, 37);
             this.lstSearchResult.Name = "lstSearchResult";
-            this.lstSearchResult.Size = new System.Drawing.Size(578, 74);
+            this.lstSearchResult.Size = new System.Drawing.Size(578, 60);
             this.lstSearchResult.TabIndex = 1;
             // 
             // btnStart
             // 
-            this.btnStart.Location = new System.Drawing.Point(195, 3);
+            this.btnStart.Location = new System.Drawing.Point(200, 4);
             this.btnStart.Name = "btnStart";
-            this.btnStart.Size = new System.Drawing.Size(92, 27);
+            this.btnStart.Size = new System.Drawing.Size(80, 27);
             this.btnStart.TabIndex = 2;
             this.btnStart.Text = "Start";
             this.btnStart.UseVisualStyleBackColor = true;
@@ -81,9 +82,9 @@ namespace XorLog.WinMain
             // 
             // btnEnd
             // 
-            this.btnEnd.Location = new System.Drawing.Point(313, 3);
+            this.btnEnd.Location = new System.Drawing.Point(297, 4);
             this.btnEnd.Name = "btnEnd";
-            this.btnEnd.Size = new System.Drawing.Size(92, 27);
+            this.btnEnd.Size = new System.Drawing.Size(80, 27);
             this.btnEnd.TabIndex = 3;
             this.btnEnd.Text = "End";
             this.btnEnd.UseVisualStyleBackColor = true;
@@ -94,7 +95,7 @@ namespace XorLog.WinMain
             this.chkAutoScroll.AutoSize = true;
             this.chkAutoScroll.Checked = true;
             this.chkAutoScroll.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkAutoScroll.Location = new System.Drawing.Point(411, 9);
+            this.chkAutoScroll.Location = new System.Drawing.Point(483, 9);
             this.chkAutoScroll.Name = "chkAutoScroll";
             this.chkAutoScroll.Size = new System.Drawing.Size(74, 17);
             this.chkAutoScroll.TabIndex = 4;
@@ -132,6 +133,7 @@ namespace XorLog.WinMain
             // split.Panel1
             // 
             this.split.Panel1.BackColor = System.Drawing.SystemColors.Control;
+            this.split.Panel1.Controls.Add(this.btnReject);
             this.split.Panel1.Controls.Add(this.btnClose);
             this.split.Panel1.Controls.Add(this.lblSizeInBytes);
             this.split.Panel1.Controls.Add(this.lblSizeReadable);
@@ -159,7 +161,7 @@ namespace XorLog.WinMain
             // 
             // btnClose
             // 
-            this.btnClose.Location = new System.Drawing.Point(20, 2);
+            this.btnClose.Location = new System.Drawing.Point(6, 3);
             this.btnClose.Name = "btnClose";
             this.btnClose.Size = new System.Drawing.Size(80, 26);
             this.btnClose.TabIndex = 13;
@@ -197,9 +199,9 @@ namespace XorLog.WinMain
             // 
             // btnClear
             // 
-            this.btnClear.Location = new System.Drawing.Point(115, 3);
+            this.btnClear.Location = new System.Drawing.Point(103, 4);
             this.btnClear.Name = "btnClear";
-            this.btnClear.Size = new System.Drawing.Size(73, 26);
+            this.btnClear.Size = new System.Drawing.Size(80, 26);
             this.btnClear.TabIndex = 9;
             this.btnClear.Text = "Clear";
             this.btnClear.UseVisualStyleBackColor = true;
@@ -242,7 +244,7 @@ namespace XorLog.WinMain
             | System.Windows.Forms.AnchorStyles.Right)));
             this.linkXoru.AutoSize = true;
             this.linkXoru.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.linkXoru.Location = new System.Drawing.Point(232, 137);
+            this.linkXoru.Location = new System.Drawing.Point(232, 131);
             this.linkXoru.Name = "linkXoru";
             this.linkXoru.Size = new System.Drawing.Size(65, 20);
             this.linkXoru.TabIndex = 7;
@@ -255,6 +257,16 @@ namespace XorLog.WinMain
             this.tmrSearchRequest.Enabled = true;
             this.tmrSearchRequest.Interval = 300;
             this.tmrSearchRequest.Tick += new System.EventHandler(this.tmrSearchRequest_Tick);
+            // 
+            // btnReject
+            // 
+            this.btnReject.Location = new System.Drawing.Point(392, 4);
+            this.btnReject.Name = "btnReject";
+            this.btnReject.Size = new System.Drawing.Size(80, 27);
+            this.btnReject.TabIndex = 14;
+            this.btnReject.Text = "Rejected text";
+            this.btnReject.UseVisualStyleBackColor = true;
+            this.btnReject.Click += new System.EventHandler(this.btnReject_Click);
             // 
             // WinMain
             // 
@@ -301,6 +313,7 @@ namespace XorLog.WinMain
         private System.Windows.Forms.Timer tmrSearchRequest;
         private System.Windows.Forms.LinkLabel linkXoru;
         private System.Windows.Forms.Button btnClose;
+        private System.Windows.Forms.Button btnReject;
     }
 }
 
