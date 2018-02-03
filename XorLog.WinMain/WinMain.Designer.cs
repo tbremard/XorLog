@@ -66,7 +66,7 @@ namespace XorLog.WinMain
             this.lstSearchResult.ItemHeight = 14;
             this.lstSearchResult.Location = new System.Drawing.Point(3, 37);
             this.lstSearchResult.Name = "lstSearchResult";
-            this.lstSearchResult.Size = new System.Drawing.Size(578, 88);
+            this.lstSearchResult.Size = new System.Drawing.Size(578, 74);
             this.lstSearchResult.TabIndex = 1;
             // 
             // btnStart
@@ -228,6 +228,8 @@ namespace XorLog.WinMain
             // 
             // txtFilePath
             // 
+            this.txtFilePath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.txtFilePath.Location = new System.Drawing.Point(72, 33);
             this.txtFilePath.Name = "txtFilePath";
             this.txtFilePath.ReadOnly = true;
@@ -240,7 +242,7 @@ namespace XorLog.WinMain
             | System.Windows.Forms.AnchorStyles.Right)));
             this.linkXoru.AutoSize = true;
             this.linkXoru.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.linkXoru.Location = new System.Drawing.Point(232, 143);
+            this.linkXoru.Location = new System.Drawing.Point(232, 137);
             this.linkXoru.Name = "linkXoru";
             this.linkXoru.Size = new System.Drawing.Size(65, 20);
             this.linkXoru.TabIndex = 7;

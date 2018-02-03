@@ -26,8 +26,10 @@ namespace XorLog.Core
 
         public void Start()
         {
-            _monitorThread = new Thread(MonitorThreadProc);
-            _monitorThread.IsBackground = true;
+            _monitorThread = new Thread(MonitorThreadProc)
+            {
+                IsBackground = true
+            };
             _shouldStop = false;
             _monitorThread.Start();
             WaitToBeReady();
@@ -45,6 +47,7 @@ namespace XorLog.Core
         {
             _shouldStop = true;
             _monitorThread.Join();
+            _isReady = false;
             _monitorThread = null;
         }
 
@@ -52,43 +55,52 @@ namespace XorLog.Core
         {
             Thread.CurrentThread.Name = "TailThread";
             _log.Debug("MonitorThreadProc is started");
-            var fileInfo = new FileInfo(Path.Combine(_directoryName, _fileName));
-            long lastLength = fileInfo.Length;
+            string fullPath = Path.Combine(_directoryName, _fileName);
+            var fileInfo = new FileInfo(fullPath);
+            long lastSizeOfFile = fileInfo.Length;
             _isReady = true;
             while (!_shouldStop)
             {
-                long currentLength = 0; 
-                try
+                long currentSizeOfFile = GetCurrentSizeOfFile(fileInfo);
+                if (currentSizeOfFile != lastSizeOfFile)
                 {
-                    fileInfo.Refresh();
-                    currentLength = fileInfo.Length;
-                }
-                catch (FileNotFoundException)
-                {
-                    _log.Debug("File was deleted");
-                }
-                if (currentLength != lastLength)
-                {
-                    _log.Debug("!!");
-                    OnTailChanged(lastLength, currentLength);
-                    lastLength = currentLength;
-                }
-                else
-                {
-                    _log.Debug("...");
+                    OnTailChanged(lastSizeOfFile, currentSizeOfFile);
+                    lastSizeOfFile = currentSizeOfFile;
                 }
                 Thread.Sleep(PollIntervalInMs);
             }
             _log.Debug("MonitorThreadProc is finished");
         }
 
-        private void OnTailChanged(long lastLength, long currentLength)
+        private long GetCurrentSizeOfFile(FileInfo fileInfo)
+        {
+            long currentLength = 0;
+            try
+            {
+                fileInfo.Refresh();
+                currentLength = fileInfo.Length;
+            }
+            catch (FileNotFoundException)
+            {
+                _log.Debug("File is not found");
+            }
+            return currentLength;
+        }
+
+        private void OnTailChanged(long lastSizeOfFile, long currentSizeOfFile)
         {
             if (TailChanged != null)
             {
-                var args = new TailEventArgs(lastLength, currentLength);
+                var args = new TailEventArgs(lastSizeOfFile, currentSizeOfFile);
                 _log.Debug("Raising event TailChanged...");
-                TailChanged(this, args);
+                try
+                {
+                    TailChanged(this, args);
+                }
+                catch (Exception e)
+                {
+                    _log.Error(e.ToString());
+                }
                 _log.Debug(".. Event TailChanged is raised");                
             }
         }

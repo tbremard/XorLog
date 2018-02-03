@@ -81,18 +81,18 @@ namespace XorLog.Core
         {
             _fileInfo.Refresh();
             NewContentIsAvailable = true;
-            if (e.CurrentLength == 0)
+            if (e.CurrentSizeOfFile == 0)
             {
                 EmptyPage();
                 OnPageLoaded();
                 return;
             }
-            if (e.CurrentLength>e.LastLength)
+            if (e.CurrentSizeOfFile>e.LastSizeOfFile)
             {
-                IList<string> tail = _stream.GetEndOfFile(e.LastLength, _rejectionList);
+                IList<string> tail = _stream.GetEndOfFile(e.LastSizeOfFile, _rejectionList);
                 OnTailUpdated(tail);                
             }
-            else if (e.CurrentLength < e.LastLength)
+            else if (e.CurrentSizeOfFile < e.LastSizeOfFile)
             {
                 FillCurrentPage(_currentPage.OffsetStart);
                 OnPageLoaded();
