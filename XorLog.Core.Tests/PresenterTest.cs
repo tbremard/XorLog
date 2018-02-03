@@ -16,14 +16,14 @@ namespace XorLog.Core.Tests
         
         private Page _currentPage;
         private Presenter _sut;
-        private ILogView _view;
+//        private ILogView _view;
 
         [SetUp]
         public void Setup()
         {
             ConfigureLogger();
             Log.Debug("current directory: "+Environment.CurrentDirectory);
-            _view = Substitute.For<ILogView>();
+           // _view = Substitute.For<ILogView>();
             _sut = new Presenter();
             _sut.PageLoaded += _sut_PageLoaded;
             _sut.SearchIsFinished += SutOnSearchIsFinished;
@@ -191,7 +191,7 @@ namespace XorLog.Core.Tests
             appender.CloseFile();
 
             var rejectionList = new List<string>{REJECTION_WORD};
-            _sut.SetRejection(rejectionList);
+            _sut.RejectionList = rejectionList;
             _sut.OpenFile(TEMP_TEST_FILE);
             _sut.GetFirstPage();
             WaitForPage();
@@ -200,7 +200,6 @@ namespace XorLog.Core.Tests
             Assert.IsNotNull(_currentPage, "Page was not set !");
             Assert.AreEqual(EXPECTED_RESULT, _currentPage.Lines.Count);
         }
-
 
         [Test]
         public void PageLoaded_WhenFileIsTruncated_ThendPageIsCorrectlyUpdated()
