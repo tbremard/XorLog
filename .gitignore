@@ -3,3 +3,4 @@
 /packages/*
 /Files4Test/BigFile.txt
 /Files4Test/*
+*.suo
