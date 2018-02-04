@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -90,7 +89,7 @@ namespace XorLog.Core
             return _currentPosition;
         }
 
-        public ReadBlock ReadBlock(char[] buffer, long count, IList<string> _rejectionList)
+        public ReadBlock ReadBlock(char[] buffer, long count, IList<string> rejectionList)
         {
             OpenFile();
             ReloadCurrentPosition();
@@ -99,23 +98,37 @@ namespace XorLog.Core
             string decoded = Encoding.UTF8.GetString(array, 0, nbRead);
             string char2StringTrimmed = decoded.TrimEnd();
             string[] lines = char2StringTrimmed.Split(LINE_SEPARATOR);
-            var ret = new ReadBlock();
             IList<string> linesNotFiltered = lines.Select(x => x.TrimEnd()).ToList();
-            if (_rejectionList == null)
+            IList<string> linesFiltered = FilterLines(rejectionList, linesNotFiltered);
+            var ret = new ReadBlock
             {
-                ret.Content = linesNotFiltered;
+                Content = linesFiltered,
+                SizeInBytes = nbRead
+            };
+            _currentPosition = _stream.Position;
+            _currentSeekOrigin = SeekOrigin.Begin;
+            CloseFile();
+            return ret;
+        }
+
+        private IList<string> FilterLines(IList<string> rejectionList, IList<string> linesNotFiltered)
+        {
+            IList<string> ret;
+            if (rejectionList == null)
+            {
+                ret = linesNotFiltered;
             }
-            else if (!_rejectionList.Any())
+            else if (!rejectionList.Any())
             {
-                ret.Content = linesNotFiltered;                
+                ret = linesNotFiltered;
             }
             else
             {
-                ret.Content = new List<string>();
+                ret = new List<string>();
                 foreach (string line in linesNotFiltered)
                 {
                     bool validLine = true;
-                    foreach (string blackWord in _rejectionList)
+                    foreach (string blackWord in rejectionList)
                     {
                         if (line.Contains(blackWord))
                         {
@@ -124,14 +137,10 @@ namespace XorLog.Core
                     }
                     if (validLine)
                     {
-                        ret.Content.Add(line);
+                        ret.Add(line);
                     }
                 }
             }
-            ret.SizeInBytes = nbRead;
-            _currentPosition = _stream.Position;
-            _currentSeekOrigin = SeekOrigin.Begin;
-            CloseFile();
             return ret;
         }
 
