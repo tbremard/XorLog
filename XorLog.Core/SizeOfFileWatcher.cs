@@ -5,7 +5,7 @@ using log4net;
 
 namespace XorLog.Core
 {
-    internal class TailWatcher
+    internal class SizeOfFileWatcher
     {
         private readonly ILog _log;
         private readonly string _directoryName;
@@ -15,10 +15,10 @@ namespace XorLog.Core
         private Thread _monitorThread;
         public int PollIntervalInMs { get; set; }
         private bool _shouldStop;
-        public event EventHandler<TailEventArgs> TailChanged;
-        public TailWatcher(string directoryName, string fileName)
+        public event EventHandler<SizeOfFileEventArgs> SizeOfFileChanged;
+        public SizeOfFileWatcher(string directoryName, string fileName)
         {
-            _log = LogManager.GetLogger("TailWatcher");
+            _log = LogManager.GetLogger("SizeOfFileWatcher");
             _directoryName = directoryName;
             _fileName = fileName;
             PollIntervalInMs = DEFAULT_POLL_INTERVAL_IN_MS;
@@ -53,7 +53,7 @@ namespace XorLog.Core
 
         private void MonitorThreadProc()
         {
-            Thread.CurrentThread.Name = "TailThread";
+            Thread.CurrentThread.Name = "FileWatcherThread";
             _log.Debug("MonitorThreadProc is started");
             string fullPath = Path.Combine(_directoryName, _fileName);
             var fileInfo = new FileInfo(fullPath);
@@ -64,7 +64,7 @@ namespace XorLog.Core
                 long currentSizeOfFile = GetCurrentSizeOfFile(fileInfo);
                 if (currentSizeOfFile != lastSizeOfFile)
                 {
-                    OnTailChanged(lastSizeOfFile, currentSizeOfFile);
+                    OnSizeOfFileChanged(lastSizeOfFile, currentSizeOfFile);
                     lastSizeOfFile = currentSizeOfFile;
                 }
                 Thread.Sleep(PollIntervalInMs);
@@ -87,21 +87,21 @@ namespace XorLog.Core
             return currentLength;
         }
 
-        private void OnTailChanged(long lastSizeOfFile, long currentSizeOfFile)
+        private void OnSizeOfFileChanged(long lastSizeOfFile, long currentSizeOfFile)
         {
-            if (TailChanged != null)
+            if (SizeOfFileChanged != null)
             {
-                var args = new TailEventArgs(lastSizeOfFile, currentSizeOfFile);
-                _log.Debug("Raising event TailChanged...");
+                var args = new SizeOfFileEventArgs(lastSizeOfFile, currentSizeOfFile);
+                _log.Debug("Raising event SizeOfFileChanged...");
                 try
                 {
-                    TailChanged(this, args);
+                    SizeOfFileChanged(this, args);
                 }
                 catch (Exception e)
                 {
                     _log.Error(e.ToString());
                 }
-                _log.Debug(".. Event TailChanged is raised");                
+                _log.Debug(".. Event SizeOfFileChanged is raised");                
             }
         }
     }

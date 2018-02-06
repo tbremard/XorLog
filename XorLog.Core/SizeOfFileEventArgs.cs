@@ -2,12 +2,12 @@
 
 namespace XorLog.Core
 {
-    internal class TailEventArgs: EventArgs
+    internal class SizeOfFileEventArgs: EventArgs
     {
         public long LastSizeOfFile { get; private set; }
         public long CurrentSizeOfFile { get; private set; }
 
-        public TailEventArgs(long lastSizeOfFile, long currentSizeOfFile)
+        public SizeOfFileEventArgs(long lastSizeOfFile, long currentSizeOfFile)
         {
             LastSizeOfFile = lastSizeOfFile;
             CurrentSizeOfFile = currentSizeOfFile;

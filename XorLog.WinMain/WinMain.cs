@@ -122,7 +122,13 @@ namespace XorLog.WinMain
         {
             string s = string.Format("SlaveScroll Changed: Min:{0} Max:{1} Position:{2}", args.Min, args.Max, args.Position);
             Debug(s);
-            decimal positionRatio =((decimal)  args.Position)/(args.Max - args.Min);
+            int length = args.Max - args.Min;
+            if (length == 0)
+            {
+                Log.Error("problem because args.Max - args.Min=0 => aborting LstFileContentOnScrollValueChanged()");
+                return;
+            }
+            decimal positionRatio =((decimal)  args.Position)/length;
             decimal offsetInPage = _currentPage.TotalSize* positionRatio;
             long offsetCalculated = _currentPage.OffsetStart + (long)Math.Floor(offsetInPage);
             Debug("Setting scrollMaster.Value =" + offsetCalculated);
@@ -148,6 +154,9 @@ namespace XorLog.WinMain
                 _currentPage = args.Content;
                 DisplayLinesOfCurrentPage();
             }
+            long size = _presenter.GetFileSize();
+            ShowSizeOfFile(size);
+
         }
 
         void _presenter_FileLoaded(object sender, FileLoadedEventArgs e)
@@ -443,6 +452,11 @@ namespace XorLog.WinMain
             rejection.SetInitialList(_presenter.RejectionList);
             DialogResult x = rejection.ShowDialog();
             _presenter.RejectionList = rejection.RejectionList;
+        }
+
+        private void btnDeleteFile_Click(object sender, EventArgs e)
+        {
+            _presenter.DeleteFile();
         }
     }
 }

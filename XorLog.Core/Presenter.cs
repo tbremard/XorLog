@@ -22,7 +22,7 @@ namespace XorLog.Core
         private const int PAGE_OVERLAPPING_IN_BYTES = 100;
         private IRawFileReader _stream;
         private Page _currentPage;
-        private TailWatcher _fileWatcher;
+        private SizeOfFileWatcher _fileWatcher;
         private bool _isReading = true;
         private FileInfo _fileInfo;
         private PageRequest _lastRequest;
@@ -44,8 +44,8 @@ namespace XorLog.Core
             _stream = new RawFileReaderEx();
             _stream.Open(path);
             _fileInfo = new FileInfo(path);
-            OnFileLoaded(path);
             WatchFile(path);
+            OnFileLoaded(path);
         }
 
         private void OnFileLoaded(string pathFileName)
@@ -73,12 +73,12 @@ namespace XorLog.Core
         {
             var fileName = Path.GetFileName(path);
             string directoryName = Path.GetDirectoryName(path);
-            _fileWatcher = new TailWatcher(directoryName, fileName);
-            _fileWatcher.TailChanged += TailChangedHandler;
+            _fileWatcher = new SizeOfFileWatcher(directoryName, fileName);
+            _fileWatcher.SizeOfFileChanged += SizeOfFileChangedHandler;
             _fileWatcher.Start();
         }
 
-        private void TailChangedHandler(object sender, TailEventArgs e)
+        private void SizeOfFileChangedHandler(object sender, SizeOfFileEventArgs e)
         {
             _fileInfo.Refresh();
             NewContentIsAvailable = true;
@@ -292,8 +292,17 @@ namespace XorLog.Core
 
         public long GetFileSize()
         {
-            _fileInfo.Refresh();
-            return _fileInfo.Length;
+            long ret = 0;
+            try
+            {
+                _fileInfo.Refresh();
+                ret = _fileInfo.Length;
+            }
+            catch (Exception e)
+            {
+                Log.Error(e.ToString());
+            }
+            return ret;
         }
 
         private int _searchIdCounter = 1;
@@ -335,6 +344,28 @@ namespace XorLog.Core
         private bool Match(string searchPattern, string lineOfText)
         {
             bool ret = lineOfText.Contains(searchPattern);
+            return ret;
+        }
+
+        public bool DeleteFile()
+        {
+            int counter = 0;
+            while (File.Exists(_path))
+            {
+                try
+                {
+                    File.Delete(_path);
+                }
+                catch (Exception e)
+                {
+                    Log.Error(e);
+                }
+                Thread.Sleep(300);
+                if(counter==10)
+                    break;
+                counter++;
+            }
+            bool ret = File.Exists(_path);
             return ret;
         }
     }

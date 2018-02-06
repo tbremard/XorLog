@@ -59,9 +59,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ResultOfSearch.cs" />
     <Compile Include="SearchEventArgs.cs" />
-    <Compile Include="TailEventArgs.cs" />
+    <Compile Include="SizeOfFileEventArgs.cs" />
     <Compile Include="TailUpdatedEventArgs.cs" />
-    <Compile Include="TailWatcher.cs" />
+    <Compile Include="SizeOfFileWatcher.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
