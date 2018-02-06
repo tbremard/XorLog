@@ -13,17 +13,16 @@ namespace XorLog.Core.Tests
         protected void ConfigureLogger()
         {
             var configFile = Directory.GetCurrentDirectory() + @"\log4net.config";
-
-            // On remplace le BasicConfigurator par le XmlConfigurator
-            // et on charge la configuration définie dans le fichier log4net.config
-            XmlConfigurator.Configure(new FileInfo(configFile));
+            var fileInfo = new FileInfo(configFile);
+            XmlConfigurator.Configure(fileInfo);
             Log = LogManager.GetLogger("Test");
         }
 
         [OneTimeSetUp]
         public void RunBeforeAnyTests()
         {
-            var dir = Path.GetDirectoryName(typeof(RawFileReaderExTest).Assembly.Location);
+            string path = typeof(RawFileReaderExTest).Assembly.Location;
+            var dir = Path.GetDirectoryName(path);
             if (dir != null)
             {
                 Environment.CurrentDirectory = dir;

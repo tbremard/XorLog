@@ -8,7 +8,7 @@ namespace CreateBigFile.Cmd
     {
         static void Main(string[] args)
         {
-            var appender = new FileAppender();
+            var appender = new Appender();
             appender.OpenFile("..\\..\\..\\Files4Test\\BigFile.txt");
             const long FILE_SIZE_IN_MB = 101;
             const long MAX_FILE_SIZE_IN_BYTES = FILE_SIZE_IN_MB * 1024 * 1024;

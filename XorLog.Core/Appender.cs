@@ -5,7 +5,7 @@ using System.Threading;
 
 namespace XorLog.Core
 {
-    public class FileAppender
+    public class Appender
     {
         private FileInfo _info;
         private FileStream _stream;
@@ -50,7 +50,6 @@ namespace XorLog.Core
 
         public void AppendLine(string s)
         {
-//            byte[] bytes = s.ToCharArray();
             byte[] toBytes = Encoding.UTF8.GetBytes(s+"\r\n");
             _stream.Write(toBytes, 0, toBytes.Length);
             _stream.Flush();

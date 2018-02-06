@@ -63,7 +63,7 @@ namespace XorLog.Core.Tests
         [Test]
         public void Open_WhenFileIsDeletedWhileOpen_ThenDoNotExistAnyMore()
         {
-            var appender = new FileAppender();
+            var appender = new Appender();
             const string TEMP_TEST_FILE = "temp222.txt";
             const string NEW_LINE = "new line";
             appender.OpenFile(TEMP_TEST_FILE);

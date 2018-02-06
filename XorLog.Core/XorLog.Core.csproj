@@ -16,7 +16,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\..\bin\Debug\</OutputPath>
+    <OutputPath>..\..\bin\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -45,7 +45,7 @@
   <ItemGroup>
     <Compile Include="CommandLineParameter.cs" />
     <Compile Include="DirectionOfContent.cs" />
-    <Compile Include="FileAppender.cs" />
+    <Compile Include="Appender.cs" />
     <Compile Include="FileLoadedEventArgs.cs" />
     <Compile Include="ILogView.cs" />
     <Compile Include="IRawFileReader.cs" />

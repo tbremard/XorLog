@@ -11,19 +11,17 @@ namespace XorLog.Core.Tests
     class PresenterTest : TestUtil
     {
         private ResultOfSearch _resultOfSearch;
-        const string TEST_FILE = @"D:\prog\design_patterns\XorLog\src\src\Files4Test\BigFile.txt";
-        const string SAMPLE_FILE = @"D:\prog\design_patterns\XorLog\src\src\Files4Test\Sample.txt";
+        const string TEST_FILE = @"..\src\Files4Test\BigFile.txt";
+        const string SAMPLE_FILE = @"..\src\Files4Test\Sample.txt";
         
         private Page _currentPage;
         private Presenter _sut;
-//        private ILogView _view;
 
         [SetUp]
         public void Setup()
         {
             ConfigureLogger();
             Log.Debug("current directory: "+Environment.CurrentDirectory);
-           // _view = Substitute.For<ILogView>();
             _sut = new Presenter();
             _sut.PageLoaded += _sut_PageLoaded;
             _sut.SearchIsFinished += SutOnSearchIsFinished;
@@ -82,7 +80,7 @@ namespace XorLog.Core.Tests
             const string NEW_LINE = "TEST LINE ADDED";
             long  firstSize = _sut.GetFileSize();
 
-            var appender = new FileAppender();
+            var appender = new Appender();
             appender.OpenFile(TEST_FILE);
             appender.AppendLine(NEW_LINE);
             appender.CloseFile();
@@ -100,7 +98,7 @@ namespace XorLog.Core.Tests
             const string NEW_LINE = "TEST LINE ADDED";
 
             Thread.Sleep(1000);
-            var appender = new FileAppender();
+            var appender = new Appender();
             appender.OpenFile(TEST_FILE);
             appender.AppendLine(NEW_LINE);
             appender.CloseFile();
@@ -120,7 +118,7 @@ namespace XorLog.Core.Tests
             _sut.TailUpdated += SutOnTailUpdated; 
             const string NEW_LINE = "TEST LINE ADDED";
 
-            var appender = new FileAppender();
+            var appender = new Appender();
             appender.OpenFile(TEST_FILE);
             appender.AppendLine(NEW_LINE);
             appender.CloseFile();
@@ -150,7 +148,7 @@ namespace XorLog.Core.Tests
         {
             const string TEMP_TEST_FILE = "temp1.txt";
 
-            var appender = new FileAppender();
+            var appender = new Appender();
             const string NEW_LINE = "new line";
             appender.OpenFile(TEMP_TEST_FILE);
             appender.AppendLine(NEW_LINE);
@@ -177,7 +175,7 @@ namespace XorLog.Core.Tests
         {
             const string TEMP_TEST_FILE = "temp1.txt";
             File.Delete(TEMP_TEST_FILE);
-            var appender = new FileAppender();
+            var appender = new Appender();
             const string REJECTION_WORD = "REJECT";
             const string NEW_LINE_1 = "aaaaaaaaaaaaaa";
             const string NEW_LINE_2 = "bbb" + REJECTION_WORD+"cccc";
@@ -206,7 +204,7 @@ namespace XorLog.Core.Tests
         {
             const string TEMP_TEST_FILE = "temp2.txt";
 
-            var appender = new FileAppender();
+            var appender = new Appender();
             const string NEW_LINE = "new line";
             appender.OpenFile(TEMP_TEST_FILE);
             appender.AppendLine(NEW_LINE);
