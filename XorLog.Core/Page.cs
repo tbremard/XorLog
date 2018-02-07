@@ -25,11 +25,11 @@ namespace XorLog.Core
         {
             string ret = string.Format("Page: Start:{0}, Stop:{1}, Size:{2}, NbLines:{3}, RequestedOffset:{4}",
                 OffsetStart, OffsetStop, TotalSize, Lines.Count, RequestedOffset);
-            if (Lines.Count > 0)
-            {
-                ret += Environment.NewLine + "First Line: " + Lines.First();
-                ret += Environment.NewLine + "Last Line: " + Lines.Last();
-            }
+//            if (Lines.Count > 0) commented because dumps private data in log
+//            {
+//                ret += Environment.NewLine + "First Line: " + Lines.First();
+//                ret += Environment.NewLine + "Last Line: " + Lines.Last();
+//            }
             return ret;
         }
     }

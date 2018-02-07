@@ -206,22 +206,25 @@ namespace XorLog.Core.Tests
 
             var appender = new Appender();
             const string NEW_LINE = "new line";
+            File.Delete(TEMP_TEST_FILE);
             appender.OpenFile(TEMP_TEST_FILE);
             appender.AppendLine(NEW_LINE);
             appender.AppendLine(NEW_LINE);
             appender.AppendLine(NEW_LINE);
 
-            const int EXPECTED_RESULT = 1;
             _sut.OpenFile(TEMP_TEST_FILE);
             _sut.GetFirstPage();
             WaitForPage();
             _currentPage = null;
-            appender.SetLength(5);
+            int newLength = NEW_LINE.Length;
+            appender.SetLength(newLength);
             appender.CloseFile();
             WaitForPage();
 
             Assert.IsNotNull(_currentPage, "Page was not set");
+            const int EXPECTED_RESULT = 1;
             Assert.AreEqual(EXPECTED_RESULT, _currentPage.Lines.Count);
+            Assert.AreEqual(NEW_LINE, _currentPage.Lines[0], "invalid content of line");
         }
 
         private void DumpList(List<string> content)
@@ -271,7 +274,7 @@ namespace XorLog.Core.Tests
             }
             if (_currentPage != null)
             {
-                Log.Debug("Page loaded succesfully. TotalSize= " + _currentPage.TotalSize);
+                Log.DebugFormat("Page loaded succesfully. TotalSize= {0} bytes", _currentPage.TotalSize);
             }
             else
             {

@@ -53,7 +53,7 @@ namespace XorLog.Core
 
         private void MonitorThreadProc()
         {
-            Thread.CurrentThread.Name = "FileWatcherThread";
+            Thread.CurrentThread.Name = "FileWatchThread";
             _log.Debug("MonitorThreadProc is started");
             string fullPath = Path.Combine(_directoryName, _fileName);
             var fileInfo = new FileInfo(fullPath);

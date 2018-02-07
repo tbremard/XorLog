@@ -65,7 +65,10 @@ namespace XorLog.Core
             var args = new PageLoadedEventArgs(_currentPage, KindOfPage.Current);
             if (PageLoaded!=null)
             {
+                Log.Debug("currentPage: "+_currentPage.ToString());
+                Log.Debug("Raising event PageLoaded...");
                 PageLoaded(this, args);
+                Log.Debug("...event PageLoaded is raised");
             }
         }
 
@@ -90,11 +93,14 @@ namespace XorLog.Core
             }
             if (e.CurrentSizeOfFile>e.LastSizeOfFile)
             {
+                Log.Debug("size of file increased");
                 IList<string> tail = _stream.GetEndOfFile(e.LastSizeOfFile, RejectionList);
                 OnTailUpdated(tail);                
             }
             else if (e.CurrentSizeOfFile < e.LastSizeOfFile)
             {
+                Log.Debug("size of file decreased");
+                _stream.SetPosition(_currentPage.OffsetStart, SeekOrigin.Begin);
                 FillCurrentPage(_currentPage.OffsetStart);
                 OnPageLoaded();
             }
@@ -312,11 +318,10 @@ namespace XorLog.Core
             _searchIdCounter++;
             var textReader = new RawFileReader();
             textReader.Open(_path);
-            string line;
             List<string> linesFound = new List<string>();
             while (!textReader.IsEndOfFile())
             {
-                line = textReader.ReadLine();
+                string line = textReader.ReadLine();
                 if (Match(searchPattern, line))
                 {
                     linesFound.Add(line); 
