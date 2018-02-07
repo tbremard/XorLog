@@ -24,7 +24,6 @@ namespace XorLog.Core
         private Page _currentPage;
         private SizeOfFileWatcher _fileWatcher;
         private bool _isReading = true;
-        private FileInfo _fileInfo;
         private PageRequest _lastRequest;
         private string _path;
 
@@ -43,7 +42,6 @@ namespace XorLog.Core
             _path = path;
             _stream = new RawFileReaderEx();
             _stream.Open(path);
-            _fileInfo = new FileInfo(path);
             WatchFile(path);
             OnFileLoaded(path);
         }
@@ -56,7 +54,7 @@ namespace XorLog.Core
             }
             string path = Path.GetDirectoryName(pathFileName);
             string fileName = Path.GetFileName(pathFileName);
-            var arg = new FileLoadedEventArgs(_fileInfo.Length, path, fileName);
+            var arg = new FileLoadedEventArgs(_fileWatcher.SizeOfFile, path, fileName);
             FileLoaded(this, arg);
         }
 
@@ -83,7 +81,6 @@ namespace XorLog.Core
 
         private void SizeOfFileChangedHandler(object sender, SizeOfFileEventArgs e)
         {
-            _fileInfo.Refresh();
             NewContentIsAvailable = true;
             if (e.CurrentSizeOfFile == 0)
             {
@@ -114,7 +111,7 @@ namespace XorLog.Core
 
         private void OnTailUpdated(IList<string> tail)
         {
-            var args = new TailUpdatedEventArgs(tail, _fileInfo.Length);
+            var args = new TailUpdatedEventArgs(tail, _fileWatcher.SizeOfFile);
             if (TailUpdated != null)
             {
                 TailUpdated(this, args);
@@ -149,11 +146,10 @@ namespace XorLog.Core
             {
                 return;
             }
-            _fileInfo.Refresh();
-            long delta = Math.Min(MAX_PAGE_SIZE_IN_BYTES, _fileInfo.Length);
+            long delta = Math.Min(MAX_PAGE_SIZE_IN_BYTES, _fileWatcher.SizeOfFile);
             _stream.SetPosition(-1 * delta, SeekOrigin.End);
             _stream.ReadLine(); // discard content till first end of line so no partial line displayed
-            long requestedOffset = _fileInfo.Length;
+            long requestedOffset = _fileWatcher.SizeOfFile;
             FillCurrentPage(requestedOffset);
             NewContentIsAvailable = true;
             OnPageLoaded();
@@ -194,7 +190,7 @@ namespace XorLog.Core
             {
                 ret = false;
             }
-            if (offset>_fileInfo.Length)
+            if (offset > _fileWatcher.SizeOfFile)
             {
                 ret = false;
             }
@@ -232,9 +228,9 @@ namespace XorLog.Core
             }
             if (direction == DirectionOfContent.Folowing)
             {
-                if (_fileInfo.Length > MAX_PAGE_SIZE_IN_BYTES)
+                if (_fileWatcher.SizeOfFile > MAX_PAGE_SIZE_IN_BYTES)
                 {
-                    long temp = _fileInfo.Length - MAX_PAGE_SIZE_IN_BYTES;
+                    long temp = _fileWatcher.SizeOfFile - MAX_PAGE_SIZE_IN_BYTES;
                     actualOffset = Math.Min(requestedOffset - PAGE_OVERLAPPING_IN_BYTES, temp);
                 }
                 else
@@ -301,8 +297,7 @@ namespace XorLog.Core
             long ret = 0;
             try
             {
-                _fileInfo.Refresh();
-                ret = _fileInfo.Length;
+                ret = _fileWatcher.SizeOfFile;
             }
             catch (Exception e)
             {

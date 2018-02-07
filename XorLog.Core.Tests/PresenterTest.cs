@@ -15,6 +15,7 @@ namespace XorLog.Core.Tests
         
         private Page _currentPage;
         private Presenter _sut;
+        private IList<string> _newTail;
 
         [SetUp]
         public void Setup()
@@ -24,7 +25,16 @@ namespace XorLog.Core.Tests
             _sut = new Presenter();
             _sut.PageLoaded += _sut_PageLoaded;
             _sut.SearchIsFinished += SutOnSearchIsFinished;
+            _newTail = null;
+            _sut.TailUpdated += SutOnTailUpdated;
         }
+
+        private void SutOnTailUpdated(object sender, TailUpdatedEventArgs args)
+        {
+            Log.Debug("Tail is received");
+            _newTail = args.Tail;
+        }
+
 
         private void SutOnSearchIsFinished(object sender, SearchEventArgs searchEventArgs)
         {
@@ -73,7 +83,7 @@ namespace XorLog.Core.Tests
         }
 
         [Test]
-        public void GetFileSize_WhenFileIsChanged_ThenSizeIsUpdated()
+        public void GetFileSize_WhenLineIsAppended_ThenSizeIsIncreased()
         {
             _sut.OpenFile(TEST_FILE);
             const string NEW_LINE = "TEST LINE ADDED";
@@ -84,6 +94,7 @@ namespace XorLog.Core.Tests
             appender.AppendLine(NEW_LINE);
             appender.CloseFile();
 
+            WaitForTail();
             long secondSize = _sut.GetFileSize();
             long diffFileSize = secondSize - firstSize;
 
@@ -113,8 +124,6 @@ namespace XorLog.Core.Tests
         public void TailUpdated_WhenFileIsChanged_ThenTailIsNotified()
         {
             _sut.OpenFile(TEST_FILE);
-            _newTail = null;
-            _sut.TailUpdated += SutOnTailUpdated; 
             const string NEW_LINE = "TEST LINE ADDED";
 
             var appender = new Appender();
@@ -232,13 +241,6 @@ namespace XorLog.Core.Tests
             {
                 Console.WriteLine(line);
             }
-        }
-
-        private IList<string> _newTail;
-        private void SutOnTailUpdated(object sender, TailUpdatedEventArgs args)
-        {
-            Log.Debug("tail is received");
-            _newTail = args.Tail;
         }
 
         private void WaitForEndOfSearch(int searchId)

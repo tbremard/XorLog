@@ -16,6 +16,10 @@ namespace XorLog.Core
         public int PollIntervalInMs { get; set; }
         private bool _shouldStop;
         public event EventHandler<SizeOfFileEventArgs> SizeOfFileChanged;
+        private long _lastSizeOfFile=-1;
+        private long _currentSizeOfFile=-1;
+        public long SizeOfFile { get { return _currentSizeOfFile; } }
+
         public SizeOfFileWatcher(string directoryName, string fileName)
         {
             _log = LogManager.GetLogger("SizeOfFileWatcher");
@@ -57,22 +61,23 @@ namespace XorLog.Core
             _log.Debug("MonitorThreadProc is started");
             string fullPath = Path.Combine(_directoryName, _fileName);
             var fileInfo = new FileInfo(fullPath);
-            long lastSizeOfFile = fileInfo.Length;
+            RefreshCurrentSizeOfFile(fileInfo);
+            _lastSizeOfFile = _currentSizeOfFile;
             _isReady = true;
             while (!_shouldStop)
             {
-                long currentSizeOfFile = GetCurrentSizeOfFile(fileInfo);
-                if (currentSizeOfFile != lastSizeOfFile)
+                RefreshCurrentSizeOfFile(fileInfo);
+                if (_currentSizeOfFile != _lastSizeOfFile)
                 {
-                    OnSizeOfFileChanged(lastSizeOfFile, currentSizeOfFile);
-                    lastSizeOfFile = currentSizeOfFile;
+                    OnSizeOfFileChanged(_lastSizeOfFile, _currentSizeOfFile);
+                    _lastSizeOfFile = _currentSizeOfFile;
                 }
                 Thread.Sleep(PollIntervalInMs);
             }
             _log.Debug("MonitorThreadProc is finished");
         }
 
-        private long GetCurrentSizeOfFile(FileInfo fileInfo)
+        private void RefreshCurrentSizeOfFile(FileInfo fileInfo)
         {
             long currentLength = 0;
             try
@@ -84,7 +89,7 @@ namespace XorLog.Core
             {
                 _log.Debug("File is not found");
             }
-            return currentLength;
+            _currentSizeOfFile = currentLength;
         }
 
         private void OnSizeOfFileChanged(long lastSizeOfFile, long currentSizeOfFile)
