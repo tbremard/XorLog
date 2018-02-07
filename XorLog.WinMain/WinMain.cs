@@ -171,6 +171,9 @@ namespace XorLog.WinMain
 
         private void ShowSizeOfFile(long sizeOfFileInBytes)
         {
+            if (isClosing)
+                return;
+
             if (InvokeRequired)
             {
                 Delegate func = new Action<long>(ShowSizeOfFile);
@@ -233,6 +236,9 @@ namespace XorLog.WinMain
 
         private void DisplayLinesOfCurrentPage()
         {
+            if (isClosing)
+                return;
+
             if (InvokeRequired)
             {
                 Delegate func = new Action(DisplayLinesOfCurrentPage);
@@ -266,13 +272,17 @@ namespace XorLog.WinMain
             set { btnEnd.Enabled = value; }
         }
 
+        private bool isClosing = false;
+
         private void AppendLines(IList<string> tail)
         {
+            if (isClosing)
+                return;
             if (InvokeRequired)
             {
                 Delegate func = new Action<List<string>>(AppendLines);
                 object[] args = { tail };
-                Invoke(func, args);
+                BeginInvoke(func, args);
                 return;
             }
 
@@ -359,6 +369,7 @@ namespace XorLog.WinMain
 
         private void WinMain_FormClosing(object sender, FormClosingEventArgs e)
         {
+            isClosing = true;
             _presenter.CloseFile();
         }
 

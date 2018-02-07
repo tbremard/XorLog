@@ -49,10 +49,12 @@ namespace XorLog.Core
 
         public void Stop()
         {
+            _log.Debug("Stopping...");
             _shouldStop = true;
             _monitorThread.Join();
             _isReady = false;
             _monitorThread = null;
+            _log.Debug("... stopped");
         }
 
         private void MonitorThreadProc()

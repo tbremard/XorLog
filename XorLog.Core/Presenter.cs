@@ -120,6 +120,7 @@ namespace XorLog.Core
 
         public void CloseFile()
         {
+            Log.Debug("Closing");
             _isReading = false;
             if (_stream==null)
             {
@@ -128,6 +129,7 @@ namespace XorLog.Core
             _stream.Close();
             _stream = null;
             _fileWatcher.Stop();
+            Log.Debug("Closed");
         }
 
         private void FillCurrentPage(long requestedOffset)
