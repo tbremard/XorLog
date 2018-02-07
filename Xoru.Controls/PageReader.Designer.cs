@@ -40,7 +40,7 @@ namespace Xoru.Controls
             this.scrollMaster.Location = new System.Drawing.Point(540, 0);
             this.scrollMaster.Maximum = 109;
             this.scrollMaster.Name = "scrollMaster";
-            this.scrollMaster.Size = new System.Drawing.Size(26, 188);
+            this.scrollMaster.Size = new System.Drawing.Size(26, 168);
             this.scrollMaster.TabIndex = 9;
             // 
             // lstPageContent

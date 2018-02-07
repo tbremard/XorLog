@@ -71,17 +71,17 @@ namespace XorLog.WinMain
             DisplayResultOfSearch(e.ResultOfSearch);
         }
 
-        private void DisplayResultOfSearch(ResultOfSearch ResultOfSearch)
+        private void DisplayResultOfSearch(ResultOfSearch resultOfSearch)
         {
             if (InvokeRequired)
             {
                 Action<ResultOfSearch> delegateFunc = DisplayResultOfSearch;
-                object[] args = new Object[1] { ResultOfSearch };
+                object[] args = new Object[1] { resultOfSearch };
                 Invoke(delegateFunc, args);
                 return;
             }
             lstSearchResult.Items.Clear();
-            lstSearchResult.Items.AddRange(ResultOfSearch.Content.ToArray());
+            lstSearchResult.Items.AddRange(resultOfSearch.Content.ToArray());
         }
 
         private void OpenFileAndShowPage(string file)
@@ -207,11 +207,14 @@ namespace XorLog.WinMain
         {
             string[] suf = { "B", "KB", "MB", "GB", "TB", "PB", "EB" }; //Longs run out around EB
             if (byteCount == 0)
-                return "0" + suf[0];
+                return "0 B";
             long bytes = Math.Abs(byteCount);
             int place = Convert.ToInt32(Math.Floor(Math.Log(bytes, 1024)));
             double num = Math.Round(bytes / Math.Pow(1024, place), 1);
-            return (Math.Sign(byteCount) * num).ToString() + " "+suf[place];
+            string numberToDisplay = (Math.Sign(byteCount) * num).ToString();
+            string unitToDisplay = suf[place];
+            string ret = numberToDisplay + " "+unitToDisplay;
+            return ret;
         }
 
         void LstFileContentScrollLimitReached(object sender, ScrollLimitEventArgs e)

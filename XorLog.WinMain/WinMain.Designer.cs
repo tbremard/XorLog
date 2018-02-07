@@ -45,12 +45,12 @@ namespace XorLog.WinMain
             this.lblSizeReadable = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.btnClear = new System.Windows.Forms.Button();
-            this._reader = new Xoru.Controls.PageReader();
             this.label2 = new System.Windows.Forms.Label();
             this.txtFilePath = new System.Windows.Forms.TextBox();
             this.linkXoru = new System.Windows.Forms.LinkLabel();
             this.tmrSearchRequest = new System.Windows.Forms.Timer(this.components);
             this.btnDeleteFile = new System.Windows.Forms.Button();
+            this._reader = new Xoru.Controls.PageReader();
             ((System.ComponentModel.ISupportInitialize)(this.split)).BeginInit();
             this.split.Panel1.SuspendLayout();
             this.split.Panel2.SuspendLayout();
@@ -68,7 +68,7 @@ namespace XorLog.WinMain
             this.lstSearchResult.ItemHeight = 14;
             this.lstSearchResult.Location = new System.Drawing.Point(3, 37);
             this.lstSearchResult.Name = "lstSearchResult";
-            this.lstSearchResult.Size = new System.Drawing.Size(687, 46);
+            this.lstSearchResult.Size = new System.Drawing.Size(687, 102);
             this.lstSearchResult.TabIndex = 1;
             // 
             // btnStart
@@ -219,18 +219,6 @@ namespace XorLog.WinMain
             this.btnClear.UseVisualStyleBackColor = true;
             this.btnClear.Click += new System.EventHandler(this.btnClear_Click);
             // 
-            // _reader
-            // 
-            this._reader.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this._reader.BackColor = System.Drawing.SystemColors.Control;
-            this._reader.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this._reader.Location = new System.Drawing.Point(16, 59);
-            this._reader.Name = "_reader";
-            this._reader.Size = new System.Drawing.Size(659, 207);
-            this._reader.TabIndex = 8;
-            // 
             // label2
             // 
             this.label2.AutoSize = true;
@@ -256,7 +244,7 @@ namespace XorLog.WinMain
             | System.Windows.Forms.AnchorStyles.Right)));
             this.linkXoru.AutoSize = true;
             this.linkXoru.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.linkXoru.Location = new System.Drawing.Point(232, 125);
+            this.linkXoru.Location = new System.Drawing.Point(288, 154);
             this.linkXoru.Name = "linkXoru";
             this.linkXoru.Size = new System.Drawing.Size(65, 20);
             this.linkXoru.TabIndex = 7;
@@ -279,6 +267,18 @@ namespace XorLog.WinMain
             this.btnDeleteFile.Text = "DeleteFile";
             this.btnDeleteFile.UseVisualStyleBackColor = true;
             this.btnDeleteFile.Click += new System.EventHandler(this.btnDeleteFile_Click);
+            // 
+            // _reader
+            // 
+            this._reader.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this._reader.BackColor = System.Drawing.SystemColors.Control;
+            this._reader.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this._reader.Location = new System.Drawing.Point(16, 59);
+            this._reader.Name = "_reader";
+            this._reader.Size = new System.Drawing.Size(659, 207);
+            this._reader.TabIndex = 8;
             // 
             // WinMain
             // 
