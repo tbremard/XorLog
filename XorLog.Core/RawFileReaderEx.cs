@@ -18,7 +18,6 @@ namespace XorLog.Core
         private long _currentPosition;
         private SeekOrigin _currentSeekOrigin;
 
-
         public void Open(string path)
         {
             _path = path;
@@ -127,14 +126,7 @@ namespace XorLog.Core
                 ret = new List<string>();
                 foreach (string line in linesNotFiltered)
                 {
-                    bool validLine = true;
-                    foreach (string blackWord in rejectionList)
-                    {
-                        if (line.Contains(blackWord))
-                        {
-                            validLine = false;
-                        }
-                    }
+                    var validLine = IsValidLine(rejectionList, line);
                     if (validLine)
                     {
                         ret.Add(line);
@@ -142,6 +134,19 @@ namespace XorLog.Core
                 }
             }
             return ret;
+        }
+
+        private bool IsValidLine(IList<string> rejectionList, string line)
+        {
+            bool validLine = true;
+            foreach (string blackWord in rejectionList)
+            {
+                if (line.Contains(blackWord))
+                {
+                    validLine = false;
+                }
+            }
+            return validLine;
         }
 
         public IList<string> CreateLinesFromBuffer(char[] buffer, long length)

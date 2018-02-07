@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
-using NSubstitute;
 using NUnit.Framework;
 
 namespace XorLog.Core.Tests

@@ -9,25 +9,6 @@ namespace Xoru.Controls
         public event EventHandler<ScrollLimitEventArgs> ScrollLimitReached;
         public event EventHandler<ScrollValueEventArgs> ScrollValueChanged;
 
-        [Serializable, StructLayout(LayoutKind.Sequential)]
-        struct Scrollinfo
-        {
-            public uint Size;
-            public uint Mask;
-            public int Min;
-            public int Max;
-            public uint Page;
-            public int Position;
-            public int TrackPosition;
-        }
-
-        [DllImport("user32.dll")]
-        static extern int SetScrollInfo(IntPtr hwnd, int fnBar, [In] ref Scrollinfo lpsi, bool fRedraw);
-
-        [DllImport("user32.dll")]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        private static extern bool GetScrollInfo(IntPtr hwnd, int fnBar, ref Scrollinfo lpsi);
-
         private const int SB_HORZ = 0;
         private const int SB_VERT = 1;
         private const int SB_LINELEFT = 0;
@@ -71,28 +52,28 @@ namespace Xoru.Controls
         {
             int sizeOfFile = 10000000;
             int positionInFile = sizeOfFile / 2;
-            Scrollinfo scrollinfo = new Scrollinfo();
-            scrollinfo.Size = (uint) Marshal.SizeOf(typeof(Scrollinfo));
+            NativeMethods.Scrollinfo scrollinfo = new NativeMethods.Scrollinfo();
+            scrollinfo.Size = (uint) Marshal.SizeOf(typeof(NativeMethods.Scrollinfo));
             scrollinfo.Mask = (uint) Convert.ToInt32(ScrollInfoMask.SIF_ALL);
             scrollinfo.Min = 0;
             scrollinfo.Max = sizeOfFile; // for example the number of items in the control
             scrollinfo.Position = positionInFile;
             scrollinfo.Page = 1;
             bool redraw = true;
-            int scrollBoxPosition = SetScrollInfo(Handle, SB_VERT, ref scrollinfo, redraw);//The return value is the current position of the scroll box. 
+            int scrollBoxPosition = NativeMethods.SetScrollInfo(Handle, SB_VERT, ref scrollinfo, redraw);//The return value is the current position of the scroll box. 
         }
 
-        private Scrollinfo? lastScrollinfo;
+        private NativeMethods.Scrollinfo? lastScrollinfo;
         private bool InspectScrollBarAndTriggerEventIfNeeded()
         {
             bool ret = false;
-            Scrollinfo scrollinfo = new Scrollinfo
+            NativeMethods.Scrollinfo scrollinfo = new NativeMethods.Scrollinfo
             {
-                Size = (uint) Marshal.SizeOf(typeof(Scrollinfo)),
+                Size = (uint) Marshal.SizeOf(typeof(NativeMethods.Scrollinfo)),
                 Mask = (uint) Convert.ToInt32(ScrollInfoMask.SIF_ALL)
             };
 
-            bool success = GetScrollInfo(Handle, SB_VERT, ref scrollinfo);
+            bool success = NativeMethods.GetScrollInfo(Handle, SB_VERT, ref scrollinfo);
             if (!success)
                 return false;
 
@@ -115,7 +96,7 @@ namespace Xoru.Controls
             return ret;
         }
 
-        private bool ScrollInfoChanged(Scrollinfo scrollinfo)
+        private bool ScrollInfoChanged(NativeMethods.Scrollinfo scrollinfo)
         {
             if (lastScrollinfo.HasValue == false)
             {
@@ -128,7 +109,7 @@ namespace Xoru.Controls
             return false;
         }
 
-        private void OnScrollValueChanged(Scrollinfo scrollinfo)
+        private void OnScrollValueChanged(NativeMethods.Scrollinfo scrollinfo)
         {
             if (ScrollValueChanged == null)
                 return;
