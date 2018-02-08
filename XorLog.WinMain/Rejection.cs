@@ -6,16 +6,19 @@ namespace XorLog.WinMain
 {
     public partial class Rejection : Form
     {
+        public IList<string> ListOfWords { get; private set; }
+
         public Rejection()
         {
             InitializeComponent();
         }
 
-        public void SetInitialList(IList<string> rejectList)
+        public void SetInitialList(IList<string> initialList)
         {
-            foreach (string word in rejectList)
+            lstDisplayed.Items.Clear();
+            foreach (string word in initialList)
             {
-                lstRejection.Items.Add(word);                
+                lstDisplayed.Items.Add(word);
             }
         }
 
@@ -26,27 +29,26 @@ namespace XorLog.WinMain
             Close();
         }
 
-        public IList<string> RejectionList { get; private set; }
         private void SaveList()
         {
-            RejectionList = new List<string>();
-            foreach (ListViewItem item in lstRejection.Items)
+            ListOfWords = new List<string>();
+            foreach (ListViewItem item in lstDisplayed.Items)
             {
-                RejectionList.Add(item.Text);
+                ListOfWords.Add(item.Text);
             }
         }
 
         private void btnAdd_Click(object sender, EventArgs e)
         {
-            AddWordHandler();
+            AddWordToList();
         }
 
-        private void AddWordHandler()
+        private void AddWordToList()
         {
             string word = txtWord.Text;
             if (string.IsNullOrEmpty(word))
                 return;
-            lstRejection.Items.Add(word);
+            lstDisplayed.Items.Add(word);
             txtWord.Clear();
         }
 
@@ -54,7 +56,7 @@ namespace XorLog.WinMain
         {
             if (e.KeyCode == Keys.Enter)
             {
-                AddWordHandler();                
+                AddWordToList();                
             }
         }
 

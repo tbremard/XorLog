@@ -58,6 +58,7 @@ namespace Xoru.Controls
             this.lstPageContent.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
             this.lstPageContent.Size = new System.Drawing.Size(537, 186);
             this.lstPageContent.TabIndex = 10;
+            this.lstPageContent.SelectedIndexChanged += new System.EventHandler(this.lstPageContent_SelectedIndexChanged);
             // 
             // PageReader
             // 

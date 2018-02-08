@@ -33,7 +33,7 @@
             this.btnClear = new System.Windows.Forms.Button();
             this.btnOk = new System.Windows.Forms.Button();
             this.txtWord = new System.Windows.Forms.TextBox();
-            this.lstRejection = new System.Windows.Forms.ListView();
+            this.lstDisplayed = new System.Windows.Forms.ListView();
             this.label1 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
@@ -90,20 +90,20 @@
             this.txtWord.TabIndex = 4;
             this.txtWord.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtWord_KeyDown);
             // 
-            // lstRejection
+            // lstDisplayed
             // 
-            this.lstRejection.Alignment = System.Windows.Forms.ListViewAlignment.Left;
-            this.lstRejection.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.lstDisplayed.Alignment = System.Windows.Forms.ListViewAlignment.Left;
+            this.lstDisplayed.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.lstRejection.AutoArrange = false;
-            this.lstRejection.Location = new System.Drawing.Point(98, 63);
-            this.lstRejection.Name = "lstRejection";
-            this.lstRejection.ShowGroups = false;
-            this.lstRejection.Size = new System.Drawing.Size(140, 151);
-            this.lstRejection.TabIndex = 5;
-            this.lstRejection.UseCompatibleStateImageBehavior = false;
-            this.lstRejection.View = System.Windows.Forms.View.List;
+            this.lstDisplayed.AutoArrange = false;
+            this.lstDisplayed.Location = new System.Drawing.Point(98, 63);
+            this.lstDisplayed.Name = "lstDisplayed";
+            this.lstDisplayed.ShowGroups = false;
+            this.lstDisplayed.Size = new System.Drawing.Size(140, 151);
+            this.lstDisplayed.TabIndex = 5;
+            this.lstDisplayed.UseCompatibleStateImageBehavior = false;
+            this.lstDisplayed.View = System.Windows.Forms.View.List;
             // 
             // label1
             // 
@@ -120,7 +120,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(334, 262);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.lstRejection);
+            this.Controls.Add(this.lstDisplayed);
             this.Controls.Add(this.txtWord);
             this.Controls.Add(this.btnOk);
             this.Controls.Add(this.btnClear);
@@ -143,7 +143,7 @@
         private System.Windows.Forms.Button btnClear;
         private System.Windows.Forms.Button btnOk;
         private System.Windows.Forms.TextBox txtWord;
-        private System.Windows.Forms.ListView lstRejection;
+        private System.Windows.Forms.ListView lstDisplayed;
         private System.Windows.Forms.Label label1;
     }
 }

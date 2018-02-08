@@ -405,9 +405,11 @@ namespace XorLog.WinMain
 
         private void RequestSearch(string searchPattern)
         {
+            lstSearchResult.Items.Clear();
             if (string.IsNullOrEmpty(searchPattern))
                 return;
-
+            if (searchPattern.Length < 2)
+                return;
             var request = new SearchRequest(searchPattern);
             _lastRequest = request;
         }
@@ -465,7 +467,10 @@ namespace XorLog.WinMain
             var rejection = new Rejection();
             rejection.SetInitialList(_presenter.RejectionList);
             DialogResult x = rejection.ShowDialog();
-            _presenter.RejectionList = rejection.RejectionList;
+            if (x == DialogResult.OK)
+            {
+                _presenter.RejectionList = rejection.ListOfWords;
+            }
         }
 
         private void btnDeleteFile_Click(object sender, EventArgs e)

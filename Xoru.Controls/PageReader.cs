@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 using System.Drawing;
+using System.Text;
 
 namespace Xoru.Controls
 {
@@ -54,6 +55,18 @@ namespace Xoru.Controls
         public void Clear()
         {
             lstPageContent.Items.Clear();
+        }
+
+        private void lstPageContent_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            var sb = new StringBuilder();
+            foreach (var x in lstPageContent.SelectedItems)
+            {
+                sb.AppendLine(x.ToString());
+            }
+            string buffer = sb.ToString();
+            if(!string.IsNullOrEmpty(buffer))
+                Clipboard.SetText(buffer);
         }
     }
 }

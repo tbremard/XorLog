@@ -356,13 +356,14 @@ namespace XorLog.Core
             {
                 try
                 {
+                    Log.DebugFormat("Try to delete file: {0}", _path);
                     File.Delete(_path);
                 }
                 catch (Exception e)
                 {
                     Log.Error(e);
                 }
-                Thread.Sleep(300);
+                Thread.Sleep(100);
                 if(counter==10)
                     break;
                 counter++;
