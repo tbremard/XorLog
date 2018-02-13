@@ -2,15 +2,20 @@
 using System.Collections.Generic;
 using System.Windows.Forms;
 
-namespace XorLog.WinMain
+namespace Xoru.Controls
 {
-    public partial class Rejection : Form
+    public partial class ViewListEditor : Form
     {
         public IList<string> ListOfWords { get; private set; }
 
-        public Rejection()
+        public ViewListEditor()
         {
             InitializeComponent();
+        }
+
+        public void SetTitle(string title)
+        {
+            Text = title;
         }
 
         public void SetInitialList(IList<string> initialList)
@@ -58,6 +63,20 @@ namespace XorLog.WinMain
             {
                 AddWordToList();                
             }
+        }
+
+        private void btnRemove_Click(object sender, EventArgs e)
+        {
+            ListView.SelectedListViewItemCollection selected = lstDisplayed.SelectedItems;
+            foreach (ListViewItem item in selected)
+            {
+                lstDisplayed.Items.Remove(item);
+            }
+        }
+
+        private void btnClear_Click(object sender, EventArgs e)
+        {
+            lstDisplayed.Items.Clear();
         }
 
     }

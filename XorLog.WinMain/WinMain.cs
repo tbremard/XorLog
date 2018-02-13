@@ -16,7 +16,8 @@ namespace XorLog.WinMain
 {
     public partial class WinMain : Form, ILogView
     {
-        private ILog Log;
+        private int MINIMUM_TIME_IN_MS = 300;
+        private ILog _log;
         Presenter _presenter;
         private Page _currentPage;
         private SearchRequest _lastRequest;
@@ -88,7 +89,7 @@ namespace XorLog.WinMain
         {
             try
             {
-                Log.Debug("Opening file: "+file);
+                _log.Debug("Opening file: "+file);
                 txtSearch.Enabled = true;
                 _reader.Enabled = true;
                 _presenter.OpenFile(file);
@@ -125,7 +126,7 @@ namespace XorLog.WinMain
             int length = args.Max - args.Min;
             if (length == 0)
             {
-                Log.Error("problem because args.Max - args.Min=0 => aborting LstFileContentOnScrollValueChanged()");
+                _log.Error("problem because args.Max - args.Min=0 => aborting LstFileContentOnScrollValueChanged()");
                 return;
             }
             decimal positionRatio =((decimal)  args.Position)/length;
@@ -134,7 +135,7 @@ namespace XorLog.WinMain
             Debug("Setting scrollMaster.Value =" + offsetCalculated);
             if (IsOutOfRange(offsetCalculated, _reader.scrollMaster))
             {
-                Log.Error("offset is out of range");
+                _log.Error("offset is out of range");
                 return;
             }
             _reader.scrollMaster.Value = (int)offsetCalculated;
@@ -375,7 +376,7 @@ namespace XorLog.WinMain
 
         private void Debug(string msg)
         {
-            Log.Debug(msg);
+            _log.Debug(msg);
         }
 
         private void ConfigureLogger()
@@ -385,7 +386,7 @@ namespace XorLog.WinMain
             // On remplace le BasicConfigurator par le XmlConfigurator
             // et on charge la configuration définie dans le fichier log4net.config
             XmlConfigurator.Configure(new FileInfo(configFile));
-            Log = LogManager.GetLogger("WinMain");
+            _log = LogManager.GetLogger("WinMain");
         }
 
         private void WinMain_DragOver(object sender, DragEventArgs e)
@@ -434,8 +435,6 @@ namespace XorLog.WinMain
             return ret;
         }
 
-        private int MINIMUM_TIME_IN_MS = 300;
-
         private void linkXoru_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             string uri = e.Link.LinkData as string;
@@ -464,7 +463,8 @@ namespace XorLog.WinMain
 
         private void btnReject_Click(object sender, EventArgs e)
         {
-            var rejection = new Rejection();
+            var rejection = new ViewListEditor();
+            rejection.SetTitle("Rejection");
             rejection.SetInitialList(_presenter.RejectionList);
             DialogResult x = rejection.ShowDialog();
             if (x == DialogResult.OK)

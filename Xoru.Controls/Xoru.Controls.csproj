@@ -56,6 +56,12 @@
     <Compile Include="ScrollLimit.cs" />
     <Compile Include="ScrollLimitEventArgs.cs" />
     <Compile Include="ScrollValueEventArgs.cs" />
+    <Compile Include="ViewListEditor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ViewListEditor.Designer.cs">
+      <DependentUpon>ViewListEditor.cs</DependentUpon>
+    </Compile>
     <Compile Include="XoruListBox.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -63,6 +69,9 @@
   <ItemGroup>
     <EmbeddedResource Include="PageReader.resx">
       <DependentUpon>PageReader.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ViewListEditor.resx">
+      <DependentUpon>ViewListEditor.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
