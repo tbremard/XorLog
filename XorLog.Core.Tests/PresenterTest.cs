@@ -208,6 +208,41 @@ namespace XorLog.Core.Tests
         }
 
         [Test]
+        public void PageLoaded_WhenRejectionIsSet_ThenCurrentPageIsRefreshed()
+        {
+            const string TEMP_TEST_FILE = "temp1.txt";
+            File.Delete(TEMP_TEST_FILE);
+            var appender = new Appender();
+            const string REJECTION_WORD = "REJECT";
+            const string NEW_LINE_1 = "aaaaaaaaaaaaaa";
+            const string NEW_LINE_2 = "bbb" + REJECTION_WORD + "cccc";
+            const string NEW_LINE_3 = "cccccccccccccc" + REJECTION_WORD;
+            const string NEW_LINE_4 = "zzzzzzzzzzzzzzzzzz";
+            appender.OpenFile(TEMP_TEST_FILE);
+            appender.AppendLine(NEW_LINE_1);
+            appender.AppendLine(NEW_LINE_2);
+            appender.AppendLine(NEW_LINE_3);
+            appender.AppendLine(NEW_LINE_4);
+            appender.CloseFile();
+
+            var rejectionList = new List<string> { REJECTION_WORD };
+            _sut.OpenFile(TEMP_TEST_FILE);
+            _sut.GetFirstPage();
+            WaitForPage();
+            Assert.IsNotNull(_currentPage, "Page was not set !");
+            const int NB_LINES_BEFORE_FILTER = 4;
+            Assert.AreEqual(NB_LINES_BEFORE_FILTER, _currentPage.Lines.Count);
+            _currentPage = null;
+
+            _sut.RejectionList = rejectionList;
+            WaitForPage();
+
+            const int NB_LINES_AFTER_FILTER = 2;
+            Assert.IsNotNull(_currentPage, "Page was not set !");
+            Assert.AreEqual(NB_LINES_AFTER_FILTER, _currentPage.Lines.Count);
+        }
+
+        [Test]
         public void PageLoaded_WhenFileIsTruncated_ThendPageIsCorrectlyUpdated()
         {
             const string TEMP_TEST_FILE = "temp2.txt";

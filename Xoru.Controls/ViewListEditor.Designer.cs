@@ -40,7 +40,7 @@
             // btnAdd
             // 
             this.btnAdd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnAdd.Location = new System.Drawing.Point(294, 24);
+            this.btnAdd.Location = new System.Drawing.Point(296, 12);
             this.btnAdd.Name = "btnAdd";
             this.btnAdd.Size = new System.Drawing.Size(67, 20);
             this.btnAdd.TabIndex = 0;
@@ -51,7 +51,7 @@
             // btnRemove
             // 
             this.btnRemove.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnRemove.Location = new System.Drawing.Point(294, 87);
+            this.btnRemove.Location = new System.Drawing.Point(296, 87);
             this.btnRemove.Name = "btnRemove";
             this.btnRemove.Size = new System.Drawing.Size(67, 20);
             this.btnRemove.TabIndex = 1;
@@ -62,7 +62,7 @@
             // btnClear
             // 
             this.btnClear.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnClear.Location = new System.Drawing.Point(294, 120);
+            this.btnClear.Location = new System.Drawing.Point(296, 120);
             this.btnClear.Name = "btnClear";
             this.btnClear.Size = new System.Drawing.Size(67, 20);
             this.btnClear.TabIndex = 2;
@@ -74,9 +74,9 @@
             // 
             this.btnOk.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnOk.Location = new System.Drawing.Point(98, 220);
+            this.btnOk.Location = new System.Drawing.Point(98, 226);
             this.btnOk.Name = "btnOk";
-            this.btnOk.Size = new System.Drawing.Size(190, 29);
+            this.btnOk.Size = new System.Drawing.Size(192, 29);
             this.btnOk.TabIndex = 3;
             this.btnOk.Text = "Ok";
             this.btnOk.UseVisualStyleBackColor = true;
@@ -86,9 +86,9 @@
             // 
             this.txtWord.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtWord.Location = new System.Drawing.Point(98, 25);
+            this.txtWord.Location = new System.Drawing.Point(98, 13);
             this.txtWord.Name = "txtWord";
-            this.txtWord.Size = new System.Drawing.Size(190, 20);
+            this.txtWord.Size = new System.Drawing.Size(192, 20);
             this.txtWord.TabIndex = 4;
             this.txtWord.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtWord_KeyDown);
             // 
@@ -99,10 +99,11 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lstDisplayed.AutoArrange = false;
-            this.lstDisplayed.Location = new System.Drawing.Point(98, 63);
+            this.lstDisplayed.FullRowSelect = true;
+            this.lstDisplayed.Location = new System.Drawing.Point(98, 39);
             this.lstDisplayed.Name = "lstDisplayed";
             this.lstDisplayed.ShowGroups = false;
-            this.lstDisplayed.Size = new System.Drawing.Size(190, 151);
+            this.lstDisplayed.Size = new System.Drawing.Size(192, 175);
             this.lstDisplayed.TabIndex = 5;
             this.lstDisplayed.UseCompatibleStateImageBehavior = false;
             this.lstDisplayed.View = System.Windows.Forms.View.List;
@@ -110,7 +111,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 28);
+            this.label1.Location = new System.Drawing.Point(12, 16);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(72, 13);
             this.label1.TabIndex = 6;
@@ -120,7 +121,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(384, 262);
+            this.ClientSize = new System.Drawing.Size(386, 262);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.lstDisplayed);
             this.Controls.Add(this.txtWord);

@@ -88,13 +88,17 @@ namespace XorLog.Core
             return _currentPosition;
         }
 
+        Encoding _encoding = Encoding.Default;
+//        Encoding encoding = Encoding.UTF8;
+
         public ReadBlock ReadBlock(char[] buffer, long count, IList<string> rejectionList)
         {
             OpenFile();
             ReloadCurrentPosition();
             byte[] array = new byte[count];
             int nbRead = _stream.Read(array, 0, (int)count);
-            string decoded = Encoding.UTF8.GetString(array, 0, nbRead);
+
+            string decoded = _encoding.GetString(array, 0, nbRead);
             string char2StringTrimmed = decoded.TrimEnd();
             string[] lines = char2StringTrimmed.Split(LINE_SEPARATOR);
             IList<string> linesNotFiltered = lines.Select(x => x.TrimEnd()).ToList();

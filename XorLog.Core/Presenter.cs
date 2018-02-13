@@ -14,7 +14,20 @@ namespace XorLog.Core
         public event EventHandler<PageLoadedEventArgs> PageLoaded;
         public event EventHandler<TailUpdatedEventArgs> TailUpdated;
         public event EventHandler<SearchEventArgs> SearchIsFinished;
-        public IList<string> RejectionList { get; set; }
+        private IList<string> _rejectionList;
+        public IList<string> RejectionList { get { return _rejectionList; }
+            set
+            {
+                Log.Debug("Rejection list is udated");
+                _rejectionList = value;
+                if (FileIsOpen)
+                {
+                    _stream.SetPosition(_currentPage.OffsetStart, SeekOrigin.Begin);
+                    FillCurrentPage(_currentPage.OffsetStart);
+                    OnPageLoaded();
+                }
+            }
+        }
 
         public long PageSizeInBytes { get { return MAX_PAGE_SIZE_IN_BYTES; } }
         private const double MINIMUM_DELAY_IN_MS = 200;
@@ -37,6 +50,7 @@ namespace XorLog.Core
             RejectionList = new List<string>();
         }
 
+        private bool FileIsOpen;
         public void OpenFile(string path)
         {
             _path = path;
@@ -44,6 +58,7 @@ namespace XorLog.Core
             _stream.Open(path);
             WatchFile(path);
             OnFileLoaded(path);
+            FileIsOpen = true;
         }
 
         private void OnFileLoaded(string pathFileName)

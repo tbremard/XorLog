@@ -470,6 +470,7 @@ namespace XorLog.WinMain
             if (x == DialogResult.OK)
             {
                 _presenter.RejectionList = rejection.ListOfWords;
+                _reader.ShowLastLine();//assume you look at last line but could be something else ....
             }
         }
 
