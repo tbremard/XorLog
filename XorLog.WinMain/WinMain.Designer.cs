@@ -39,6 +39,7 @@ namespace XorLog.WinMain
             this.txtSearch = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.split = new System.Windows.Forms.SplitContainer();
+            this.btnDeleteFile = new System.Windows.Forms.Button();
             this.btnReject = new System.Windows.Forms.Button();
             this.btnClose = new System.Windows.Forms.Button();
             this.lblSizeInBytes = new System.Windows.Forms.Label();
@@ -49,7 +50,7 @@ namespace XorLog.WinMain
             this.txtFilePath = new System.Windows.Forms.TextBox();
             this.linkXoru = new System.Windows.Forms.LinkLabel();
             this.tmrSearchRequest = new System.Windows.Forms.Timer(this.components);
-            this.btnDeleteFile = new System.Windows.Forms.Button();
+            this.lstEncoding = new System.Windows.Forms.ComboBox();
             this._reader = new Xoru.Controls.PageReader();
             ((System.ComponentModel.ISupportInitialize)(this.split)).BeginInit();
             this.split.Panel1.SuspendLayout();
@@ -66,28 +67,28 @@ namespace XorLog.WinMain
             this.lstSearchResult.FormattingEnabled = true;
             this.lstSearchResult.HorizontalScrollbar = true;
             this.lstSearchResult.ItemHeight = 14;
-            this.lstSearchResult.Location = new System.Drawing.Point(3, 37);
+            this.lstSearchResult.Location = new System.Drawing.Point(16, 37);
             this.lstSearchResult.Name = "lstSearchResult";
-            this.lstSearchResult.Size = new System.Drawing.Size(687, 102);
+            this.lstSearchResult.Size = new System.Drawing.Size(647, 88);
             this.lstSearchResult.TabIndex = 1;
             // 
             // btnStart
             // 
-            this.btnStart.Location = new System.Drawing.Point(292, 4);
+            this.btnStart.Location = new System.Drawing.Point(282, 4);
             this.btnStart.Name = "btnStart";
             this.btnStart.Size = new System.Drawing.Size(80, 26);
             this.btnStart.TabIndex = 2;
-            this.btnStart.Text = "Start";
+            this.btnStart.Text = "StartOfFile";
             this.btnStart.UseVisualStyleBackColor = true;
             this.btnStart.Click += new System.EventHandler(this.btnStart_Click);
             // 
             // btnEnd
             // 
-            this.btnEnd.Location = new System.Drawing.Point(387, 4);
+            this.btnEnd.Location = new System.Drawing.Point(369, 4);
             this.btnEnd.Name = "btnEnd";
             this.btnEnd.Size = new System.Drawing.Size(80, 26);
             this.btnEnd.TabIndex = 3;
-            this.btnEnd.Text = "End";
+            this.btnEnd.Text = "EndOfFile";
             this.btnEnd.UseVisualStyleBackColor = true;
             this.btnEnd.Click += new System.EventHandler(this.btnEnd_Click);
             // 
@@ -96,7 +97,7 @@ namespace XorLog.WinMain
             this.chkAutoScroll.AutoSize = true;
             this.chkAutoScroll.Checked = true;
             this.chkAutoScroll.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkAutoScroll.Location = new System.Drawing.Point(614, 6);
+            this.chkAutoScroll.Location = new System.Drawing.Point(620, 6);
             this.chkAutoScroll.Name = "chkAutoScroll";
             this.chkAutoScroll.Size = new System.Drawing.Size(74, 17);
             this.chkAutoScroll.TabIndex = 4;
@@ -108,9 +109,9 @@ namespace XorLog.WinMain
             this.txtSearch.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtSearch.Location = new System.Drawing.Point(88, 3);
+            this.txtSearch.Location = new System.Drawing.Point(99, 6);
             this.txtSearch.Name = "txtSearch";
-            this.txtSearch.Size = new System.Drawing.Size(602, 20);
+            this.txtSearch.Size = new System.Drawing.Size(564, 20);
             this.txtSearch.TabIndex = 5;
             this.txtSearch.TextChanged += new System.EventHandler(this.txtSearch_TextChanged);
             // 
@@ -119,9 +120,9 @@ namespace XorLog.WinMain
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(12, 10);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(35, 13);
+            this.label1.Size = new System.Drawing.Size(81, 13);
             this.label1.TabIndex = 6;
-            this.label1.Text = "Filter: ";
+            this.label1.Text = "SearchPattern: ";
             // 
             // split
             // 
@@ -134,6 +135,7 @@ namespace XorLog.WinMain
             // split.Panel1
             // 
             this.split.Panel1.BackColor = System.Drawing.SystemColors.Control;
+            this.split.Panel1.Controls.Add(this.lstEncoding);
             this.split.Panel1.Controls.Add(this.btnDeleteFile);
             this.split.Panel1.Controls.Add(this.btnReject);
             this.split.Panel1.Controls.Add(this.btnClose);
@@ -155,15 +157,25 @@ namespace XorLog.WinMain
             this.split.Panel2.Controls.Add(this.lstSearchResult);
             this.split.Panel2.Controls.Add(this.label1);
             this.split.Panel2.Controls.Add(this.txtSearch);
-            this.split.Size = new System.Drawing.Size(693, 462);
+            this.split.Size = new System.Drawing.Size(714, 462);
             this.split.SplitterDistance = 269;
             this.split.SplitterWidth = 10;
             this.split.TabIndex = 7;
             this.split.TabStop = false;
             // 
+            // btnDeleteFile
+            // 
+            this.btnDeleteFile.Location = new System.Drawing.Point(7, 4);
+            this.btnDeleteFile.Name = "btnDeleteFile";
+            this.btnDeleteFile.Size = new System.Drawing.Size(80, 26);
+            this.btnDeleteFile.TabIndex = 15;
+            this.btnDeleteFile.Text = "DeleteFile";
+            this.btnDeleteFile.UseVisualStyleBackColor = true;
+            this.btnDeleteFile.Click += new System.EventHandler(this.btnDeleteFile_Click);
+            // 
             // btnReject
             // 
-            this.btnReject.Location = new System.Drawing.Point(482, 4);
+            this.btnReject.Location = new System.Drawing.Point(456, 4);
             this.btnReject.Name = "btnReject";
             this.btnReject.Size = new System.Drawing.Size(80, 26);
             this.btnReject.TabIndex = 14;
@@ -184,7 +196,7 @@ namespace XorLog.WinMain
             // lblSizeInBytes
             // 
             this.lblSizeInBytes.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.lblSizeInBytes.Location = new System.Drawing.Point(589, 42);
+            this.lblSizeInBytes.Location = new System.Drawing.Point(610, 42);
             this.lblSizeInBytes.Name = "lblSizeInBytes";
             this.lblSizeInBytes.Size = new System.Drawing.Size(100, 13);
             this.lblSizeInBytes.TabIndex = 12;
@@ -193,7 +205,7 @@ namespace XorLog.WinMain
             // lblSizeReadable
             // 
             this.lblSizeReadable.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.lblSizeReadable.Location = new System.Drawing.Point(589, 26);
+            this.lblSizeReadable.Location = new System.Drawing.Point(610, 26);
             this.lblSizeReadable.Name = "lblSizeReadable";
             this.lblSizeReadable.Size = new System.Drawing.Size(100, 13);
             this.lblSizeReadable.TabIndex = 11;
@@ -203,7 +215,7 @@ namespace XorLog.WinMain
             // 
             this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(555, 38);
+            this.label3.Location = new System.Drawing.Point(576, 38);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(33, 13);
             this.label3.TabIndex = 10;
@@ -215,7 +227,7 @@ namespace XorLog.WinMain
             this.btnClear.Name = "btnClear";
             this.btnClear.Size = new System.Drawing.Size(80, 26);
             this.btnClear.TabIndex = 9;
-            this.btnClear.Text = "Clear";
+            this.btnClear.Text = "ClearScreen";
             this.btnClear.UseVisualStyleBackColor = true;
             this.btnClear.Click += new System.EventHandler(this.btnClear_Click);
             // 
@@ -235,7 +247,7 @@ namespace XorLog.WinMain
             this.txtFilePath.Location = new System.Drawing.Point(72, 33);
             this.txtFilePath.Name = "txtFilePath";
             this.txtFilePath.ReadOnly = true;
-            this.txtFilePath.Size = new System.Drawing.Size(442, 20);
+            this.txtFilePath.Size = new System.Drawing.Size(463, 20);
             this.txtFilePath.TabIndex = 5;
             // 
             // linkXoru
@@ -244,7 +256,7 @@ namespace XorLog.WinMain
             | System.Windows.Forms.AnchorStyles.Right)));
             this.linkXoru.AutoSize = true;
             this.linkXoru.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.linkXoru.Location = new System.Drawing.Point(288, 154);
+            this.linkXoru.Location = new System.Drawing.Point(288, 148);
             this.linkXoru.Name = "linkXoru";
             this.linkXoru.Size = new System.Drawing.Size(65, 20);
             this.linkXoru.TabIndex = 7;
@@ -258,15 +270,15 @@ namespace XorLog.WinMain
             this.tmrSearchRequest.Interval = 300;
             this.tmrSearchRequest.Tick += new System.EventHandler(this.tmrSearchRequest_Tick);
             // 
-            // btnDeleteFile
+            // lstEncoding
             // 
-            this.btnDeleteFile.Location = new System.Drawing.Point(7, 4);
-            this.btnDeleteFile.Name = "btnDeleteFile";
-            this.btnDeleteFile.Size = new System.Drawing.Size(80, 26);
-            this.btnDeleteFile.TabIndex = 15;
-            this.btnDeleteFile.Text = "DeleteFile";
-            this.btnDeleteFile.UseVisualStyleBackColor = true;
-            this.btnDeleteFile.Click += new System.EventHandler(this.btnDeleteFile_Click);
+            this.lstEncoding.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.lstEncoding.FormattingEnabled = true;
+            this.lstEncoding.Location = new System.Drawing.Point(541, 7);
+            this.lstEncoding.Name = "lstEncoding";
+            this.lstEncoding.Size = new System.Drawing.Size(70, 21);
+            this.lstEncoding.TabIndex = 16;
+            this.lstEncoding.SelectedIndexChanged += new System.EventHandler(this.lstEncoding_SelectedIndexChanged);
             // 
             // _reader
             // 
@@ -277,7 +289,7 @@ namespace XorLog.WinMain
             this._reader.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this._reader.Location = new System.Drawing.Point(16, 59);
             this._reader.Name = "_reader";
-            this._reader.Size = new System.Drawing.Size(659, 207);
+            this._reader.Size = new System.Drawing.Size(680, 207);
             this._reader.TabIndex = 8;
             // 
             // WinMain
@@ -285,12 +297,12 @@ namespace XorLog.WinMain
             this.AllowDrop = true;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(693, 462);
+            this.ClientSize = new System.Drawing.Size(714, 462);
             this.Controls.Add(this.split);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "WinMain";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "XorLog @ThieryBrémard";
+            this.Text = "XorLog ©Xoru.eu - Thierry Brémard";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.WinMain_FormClosing);
             this.Shown += new System.EventHandler(this.WinMain_Shown);
             this.DragDrop += new System.Windows.Forms.DragEventHandler(this.DragDropHandler);
@@ -327,6 +339,7 @@ namespace XorLog.WinMain
         private System.Windows.Forms.Button btnClose;
         private System.Windows.Forms.Button btnReject;
         private System.Windows.Forms.Button btnDeleteFile;
+        private System.Windows.Forms.ComboBox lstEncoding;
     }
 }
 

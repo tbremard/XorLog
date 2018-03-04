@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using System.Threading;
 using log4net;
 
@@ -15,19 +16,6 @@ namespace XorLog.Core
         public event EventHandler<TailUpdatedEventArgs> TailUpdated;
         public event EventHandler<SearchEventArgs> SearchIsFinished;
         private IList<string> _rejectionList;
-        public IList<string> RejectionList { get { return _rejectionList; }
-            set
-            {
-                Log.Debug("Rejection list is udated");
-                _rejectionList = value;
-                if (FileIsOpen)
-                {
-                    _stream.SetPosition(_currentPage.OffsetStart, SeekOrigin.Begin);
-                    FillCurrentPage(_currentPage.OffsetStart);
-                    OnPageLoaded();
-                }
-            }
-        }
 
         public long PageSizeInBytes { get { return MAX_PAGE_SIZE_IN_BYTES; } }
         private const double MINIMUM_DELAY_IN_MS = 200;
@@ -50,7 +38,7 @@ namespace XorLog.Core
             RejectionList = new List<string>();
         }
 
-        private bool FileIsOpen;
+        private bool _fileIsOpen;
         public void OpenFile(string path)
         {
             _path = path;
@@ -58,7 +46,7 @@ namespace XorLog.Core
             _stream.Open(path);
             WatchFile(path);
             OnFileLoaded(path);
-            FileIsOpen = true;
+            _fileIsOpen = true;
         }
 
         private void OnFileLoaded(string pathFileName)
@@ -385,6 +373,31 @@ namespace XorLog.Core
             }
             bool ret = File.Exists(_path);
             return ret;
+        }
+
+        public IList<string> RejectionList
+        {
+            get { return _rejectionList; }
+            set
+            {
+                Log.Debug("Rejection list is udated");
+                _rejectionList = value;
+                if (_fileIsOpen)
+                {
+                    _stream.SetPosition(_currentPage.OffsetStart, SeekOrigin.Begin);
+                    FillCurrentPage(_currentPage.OffsetStart);
+                    OnPageLoaded();
+                }
+            }
+        }
+
+        public void SetEncoding(Encoding itemEncoder)
+        {
+            if (_stream == null)
+            {
+                return;
+            }
+            _stream.SetEncoding(itemEncoder);
         }
     }
 }

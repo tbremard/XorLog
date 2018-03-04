@@ -17,6 +17,7 @@ namespace XorLog.Core
         private string _path;
         private long _currentPosition;
         private SeekOrigin _currentSeekOrigin;
+        Encoding _encoding = Encoding.Default;
 
         public void Open(string path)
         {
@@ -88,8 +89,12 @@ namespace XorLog.Core
             return _currentPosition;
         }
 
-        Encoding _encoding = Encoding.Default;
-//        Encoding encoding = Encoding.UTF8;
+        public void SetEncoding(Encoding itemEncoder)
+        {
+            Log.Debug("encoding is changed to "+ itemEncoder);
+            _encoding = itemEncoder;
+        }
+
 
         public ReadBlock ReadBlock(char[] buffer, long count, IList<string> rejectionList)
         {

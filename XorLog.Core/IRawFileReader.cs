@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Text;
 
 namespace XorLog.Core
 {
@@ -14,5 +15,6 @@ namespace XorLog.Core
         IList<string> GetEndOfFile(long offsetStart, IList<string> _rejectionList);
         string ReadLine();
         IList<string> CreateLinesFromBuffer(char[] buffer, long length);
+        void SetEncoding(Encoding itemEncoder);
     }
 }

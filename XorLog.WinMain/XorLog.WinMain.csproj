@@ -53,6 +53,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EncodingItem.cs" />
     <Compile Include="SearchRequest.cs" />
     <Compile Include="WinMain.cs">
       <SubType>Form</SubType>

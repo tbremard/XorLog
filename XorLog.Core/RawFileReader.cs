@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using log4net;
 
 namespace XorLog.Core
@@ -100,5 +101,9 @@ namespace XorLog.Core
             return ret;
         }
 
+        public void SetEncoding(Encoding itemEncoder)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

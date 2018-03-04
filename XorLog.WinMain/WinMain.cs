@@ -21,6 +21,7 @@ namespace XorLog.WinMain
         Presenter _presenter;
         private Page _currentPage;
         private SearchRequest _lastRequest;
+        private Encoding _selectedEncoder;
 
         public WinMain()
         {
@@ -38,6 +39,7 @@ namespace XorLog.WinMain
             WindowState = parameters.WindowState;
             chkAutoScroll.Checked = parameters.AutoScroll;
             SetEventHandlers();
+            PopulateEncodings();
 
             if (parameters.File != null && File.Exists(parameters.File))
             {
@@ -47,6 +49,26 @@ namespace XorLog.WinMain
             {
                 ClearScreen();
             }
+        }
+
+        private void PopulateEncodings()
+        {
+            IEnumerable<EncodingItem> list = CreateEncoderList();
+            foreach (EncodingItem item in list)
+            {
+                lstEncoding.Items.Add(item);
+            }
+            lstEncoding.SelectedIndex = 0;
+        }
+
+        private IEnumerable<EncodingItem> CreateEncoderList()
+        {
+            List<EncodingItem> ret = new List<EncodingItem>();
+            ret.Add(new EncodingItem("ANSI", Encoding.Default));
+            ret.Add(new EncodingItem("UTF8", Encoding.UTF8));
+            ret.Add(new EncodingItem("UTF32", Encoding.UTF32));
+            ret.Add(new EncodingItem("ASCII", Encoding.ASCII));
+            return ret;
         }
 
         private void SetEventHandlers()
@@ -165,6 +187,7 @@ namespace XorLog.WinMain
             Debug(string.Format("File is loaded: {0} Size: {1} bytes", e.FileName, e.TotalSize));
             btnStart.Enabled = true;
             btnEnd.Enabled = true;
+            _presenter.SetEncoding(_selectedEncoder);
             _reader.SetScrollMaster(e.TotalSize);
             txtFilePath.Text = Path.Combine(e.Path, e.FileName);
             ShowSizeOfFile(e.TotalSize);
@@ -477,6 +500,14 @@ namespace XorLog.WinMain
         private void btnDeleteFile_Click(object sender, EventArgs e)
         {
             _presenter.DeleteFile();
+        }
+
+        private void lstEncoding_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            var item = lstEncoding.SelectedItem as EncodingItem;
+            _log.Debug("User selected encoding: "+item.DisplayName);
+            _selectedEncoder = item.Encoder;
+            _presenter.SetEncoding(item.Encoder);
         }
     }
 }
