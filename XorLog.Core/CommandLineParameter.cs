@@ -21,17 +21,33 @@ namespace XorLog.Core
 
         private void Parse(string[] args)
         {
-            if (args.Length == 3)
-            {
-                if (args[1] == "-file")
-                {
-                    File = args[2];
-                }
-            }
+            const string KEY_FILE = "-file";
+            const string KEY_ENCODING = "-encoding";
 
             if (args.Length == 2)
             {
                 File = args[1];
+                return;
+            }
+            if (args.Length > 2)
+            {
+                // iterate on couple argName/argValue
+                int index = 1;
+                while (index < args.Length)
+                {
+                    string currentKey = args[index];
+                    if (currentKey == KEY_FILE)
+                    {
+                        index++;
+                        File = args[index];
+                    }
+                    if (currentKey == KEY_ENCODING)
+                    {
+                        index++;
+                        Encoding = args[index];
+                    }
+                    index++;
+                }
             }
         }
 
