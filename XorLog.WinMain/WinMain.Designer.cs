@@ -69,12 +69,12 @@ namespace XorLog.WinMain
             this.lstSearchResult.ItemHeight = 14;
             this.lstSearchResult.Location = new System.Drawing.Point(16, 37);
             this.lstSearchResult.Name = "lstSearchResult";
-            this.lstSearchResult.Size = new System.Drawing.Size(647, 88);
+            this.lstSearchResult.Size = new System.Drawing.Size(647, 102);
             this.lstSearchResult.TabIndex = 1;
             // 
             // btnStart
             // 
-            this.btnStart.Location = new System.Drawing.Point(282, 4);
+            this.btnStart.Location = new System.Drawing.Point(274, 4);
             this.btnStart.Name = "btnStart";
             this.btnStart.Size = new System.Drawing.Size(80, 26);
             this.btnStart.TabIndex = 2;
@@ -84,7 +84,7 @@ namespace XorLog.WinMain
             // 
             // btnEnd
             // 
-            this.btnEnd.Location = new System.Drawing.Point(369, 4);
+            this.btnEnd.Location = new System.Drawing.Point(363, 4);
             this.btnEnd.Name = "btnEnd";
             this.btnEnd.Size = new System.Drawing.Size(80, 26);
             this.btnEnd.TabIndex = 3;
@@ -175,7 +175,7 @@ namespace XorLog.WinMain
             // 
             // btnReject
             // 
-            this.btnReject.Location = new System.Drawing.Point(456, 4);
+            this.btnReject.Location = new System.Drawing.Point(452, 4);
             this.btnReject.Name = "btnReject";
             this.btnReject.Size = new System.Drawing.Size(80, 26);
             this.btnReject.TabIndex = 14;
@@ -185,7 +185,7 @@ namespace XorLog.WinMain
             // 
             // btnClose
             // 
-            this.btnClose.Location = new System.Drawing.Point(102, 4);
+            this.btnClose.Location = new System.Drawing.Point(96, 4);
             this.btnClose.Name = "btnClose";
             this.btnClose.Size = new System.Drawing.Size(80, 26);
             this.btnClose.TabIndex = 13;
@@ -223,7 +223,7 @@ namespace XorLog.WinMain
             // 
             // btnClear
             // 
-            this.btnClear.Location = new System.Drawing.Point(197, 4);
+            this.btnClear.Location = new System.Drawing.Point(185, 4);
             this.btnClear.Name = "btnClear";
             this.btnClear.Size = new System.Drawing.Size(80, 26);
             this.btnClear.TabIndex = 9;

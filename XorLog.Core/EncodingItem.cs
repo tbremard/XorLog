@@ -1,8 +1,8 @@
 ﻿using System.Text;
 
-namespace XorLog.WinMain
+namespace XorLog.Core
 {
-    class EncodingItem
+    public class EncodingItem
     {
         public string DisplayName { get; private set; }
         public Encoding Encoder { get; private set; }

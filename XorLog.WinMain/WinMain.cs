@@ -39,7 +39,7 @@ namespace XorLog.WinMain
             WindowState = parameters.WindowState;
             chkAutoScroll.Checked = parameters.AutoScroll;
             SetEventHandlers();
-            PopulateEncodings();
+            PopulateEncodings(parameters.Encoding);
 
             if (parameters.File != null && File.Exists(parameters.File))
             {
@@ -51,24 +51,23 @@ namespace XorLog.WinMain
             }
         }
 
-        private void PopulateEncodings()
+        private void PopulateEncodings(string startupEncoder)
         {
-            IEnumerable<EncodingItem> list = CreateEncoderList();
+            var encodings = new SupportedEncodings();
+            IEnumerable<EncodingItem> list = encodings.GetEncoderList();
             foreach (EncodingItem item in list)
             {
                 lstEncoding.Items.Add(item);
             }
-            lstEncoding.SelectedIndex = 0;
-        }
-
-        private IEnumerable<EncodingItem> CreateEncoderList()
-        {
-            List<EncodingItem> ret = new List<EncodingItem>();
-            ret.Add(new EncodingItem("ANSI", Encoding.Default));
-            ret.Add(new EncodingItem("UTF8", Encoding.UTF8));
-            ret.Add(new EncodingItem("UTF32", Encoding.UTF32));
-            ret.Add(new EncodingItem("ASCII", Encoding.ASCII));
-            return ret;
+            if (encodings.IsValidName(startupEncoder))
+            {
+                EncodingItem x = encodings.GetItem(startupEncoder);
+                lstEncoding.SelectedItem = x;
+            }
+            else
+            {
+                lstEncoding.SelectedIndex = 0;
+            }
         }
 
         private void SetEventHandlers()

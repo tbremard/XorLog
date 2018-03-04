@@ -46,6 +46,7 @@
     <Compile Include="CommandLineParameter.cs" />
     <Compile Include="DirectionOfContent.cs" />
     <Compile Include="Appender.cs" />
+    <Compile Include="EncodingItem.cs" />
     <Compile Include="FileLoadedEventArgs.cs" />
     <Compile Include="ILogView.cs" />
     <Compile Include="IRawFileReader.cs" />
@@ -60,6 +61,7 @@
     <Compile Include="ResultOfSearch.cs" />
     <Compile Include="SearchEventArgs.cs" />
     <Compile Include="SizeOfFileEventArgs.cs" />
+    <Compile Include="SupportedEncodings.cs" />
     <Compile Include="TailUpdatedEventArgs.cs" />
     <Compile Include="SizeOfFileWatcher.cs" />
   </ItemGroup>

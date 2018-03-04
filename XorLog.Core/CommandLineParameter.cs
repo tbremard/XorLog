@@ -48,7 +48,7 @@ namespace XorLog.Core
         {
             WindowState = FormWindowState.Normal;
             AutoScroll = true;
-            Encoding = "utf-8";
+            Encoding = SupportedEncodings.UTF8;
             File = null;
         }
 

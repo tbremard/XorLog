@@ -95,7 +95,6 @@ namespace XorLog.Core
             _encoding = itemEncoder;
         }
 
-
         public ReadBlock ReadBlock(char[] buffer, long count, IList<string> rejectionList)
         {
             OpenFile();
